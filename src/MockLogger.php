@@ -34,7 +34,6 @@ class MockLogger extends HttpLogger
      */
     protected $logger;
 
-
     /**
      * Get request data to be logged.
      *

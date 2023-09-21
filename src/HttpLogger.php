@@ -72,13 +72,13 @@ class HttpLogger
     /**
      * Log data to the remote server.
      *
-     * @param mixed $data The log data to be sent to the server.
+     * @param array $data The log data to be sent to the server.
      *
      * @throws \Exception If the API credentials are not set.
      * 
      * @return \Illuminate\Http\Client\Response
      */
-    public function log($data): Response
+    public function log(array $data): Response
     {
         // Check if API key, app key, and host URL are set
         if (!$this->apiKey || !$this->appKey || !$this->hostUrl) {
