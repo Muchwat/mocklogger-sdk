@@ -5,24 +5,23 @@ The MockLogger SDK offers functionality for logging request and response data. T
 To get started with the MockLogger SDK, follow these installation steps:
 
 #### Install the SDK:
-
 Install the MockLogger SDK using Composer:
 
 ```bash
 composer require moktech/mocklogger-sdk
 ```
-#### Publish Configuration:
 
+#### Publish Configuration:
 Publish the MockLogger SDK configuration file using Artisan:
 
 ```bash
 php artisan vendor:publish --tag=mocklogger-config
 ```
+
 ### Usage
 Once you have installed the MockLogger SDK and configured your environment, you can use it to log request and response data. Here are two ways to use the SDK:
 
 #### Set Environment Variables:
-
 Set the following environment variables in your application. You can obtain these values from your Mocklogger application:
 
 ```dotenv
@@ -33,12 +32,23 @@ MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
 ```
 
 #### Method 1: Using sendLog
+Use this in your Terminable Middleware.
+
 ```php
 use Moktech\MockLoggerSDK\MockLogger;
 
-$logger = new MockLogger();
-$logger->sendLog($request, $response);
+
+public function terminate($request, $response)
+{
+    try {
+        $logger = new MockLogger();
+        $logger->sendLog($request, $response);
+    } catch (\Throwable $th) {
+        Log::info($th->getMessage());
+    }
+}
 ```
+
 #### Method 2: Using sendData
 You can also manually assemble the request and response data and use the sendData method to log it.
 
