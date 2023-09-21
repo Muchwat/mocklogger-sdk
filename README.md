@@ -30,4 +30,6 @@ $data = [
         'timestamp' => now(),
     ],
 ];
+
+$logger->sendData($data);
 ```

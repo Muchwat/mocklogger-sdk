@@ -14,7 +14,7 @@
  * $appApiToken = $config->getAppApiToken();
  */
 
-namespace Moktech\MockLogger;
+namespace Moktech\MockLoggerSDK;
 
 class AppConfig
 {
