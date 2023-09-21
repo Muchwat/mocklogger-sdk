@@ -46,7 +46,10 @@ use Moktech\MockLoggerSDK\MockLogger;
 
 $data = [
     "request" => [
-        'user' => ['name' => 'Kevin Muchwat'],
+        'user' => [
+            'name' => 'Kevin Muchwat',
+            'email' => 'kevinmuchwat@gmail.com',
+        ],
         'ip_address' => $request->ip(),
         'full_url' => $request->fullUrl(),
         'method' => $request->method(),
