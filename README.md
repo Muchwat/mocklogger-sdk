@@ -1,10 +1,6 @@
 The MockLogger SDK offers functionality for logging request and response data. This SDK provides methods to capture and log data pertaining to incoming HTTP requests and their associated responses.
  
 Usage:
-```
-composer require moktech/mocklogger-sdk
-php artisan vendor:publish --tag=mocklogger-config
-
 Set evironment variables gotten from Mocklogger application:
 
 ```
@@ -14,9 +10,11 @@ MOCKLOGGER_APP_KEY=c3ce75317d9c876d209a9f439b345345
 MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
 ```
 
-Import MockLoggerSDK in your Class:
-
 ```
+composer require moktech/mocklogger-sdk
+php artisan vendor:publish --tag=mocklogger-config
+
+
 use Moktech\MockLoggerSDK\MockLogger;
 
 $logger = new MockLogger();
