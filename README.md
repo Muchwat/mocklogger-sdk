@@ -5,6 +5,14 @@ Usage:
 composer require moktech/mocklogger-sdk
 php artisan vendor:publish --tag=mocklogger-config
 
+Set evironment variables gotten from Mocklogger application:
+```
+MOCKLOGGER_HOST_URL=http://localhost:8000
+MOCKLOGGER_APP_ID="My Application"
+MOCKLOGGER_APP_KEY=c3ce75317d9c876d209a9f439b345345
+MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
+```
+
 use Moktech\MockLoggerSDK\MockLogger;
 
 $logger = new MockLogger();
