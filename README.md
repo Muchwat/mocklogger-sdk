@@ -32,7 +32,7 @@ MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
 ```
 
 #### Method 1: Using sendLog
-Use this in your Terminable Middleware.
+Use this in your Terminable Middleware (Sunctum protected URL).
 
 ```php
 use Moktech\MockLoggerSDK\MockLogger;
