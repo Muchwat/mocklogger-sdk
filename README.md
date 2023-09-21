@@ -4,16 +4,6 @@ The MockLogger SDK offers functionality for logging request and response data. T
 ### Installation
 To get started with the MockLogger SDK, follow these installation steps:
 
-#### Set Environment Variables:
-
-Set the following environment variables in your application. You can obtain these values from your Mocklogger application:
-
-```dotenv
-MOCKLOGGER_HOST_URL=http://localhost:8000
-MOCKLOGGER_APP_ID="My Application"
-MOCKLOGGER_APP_KEY=c3ce75317d9c876d209a9f439b345345
-MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
-```
 #### Install the SDK:
 
 Install the MockLogger SDK using Composer:
@@ -30,6 +20,17 @@ php artisan vendor:publish --tag=mocklogger-config
 ```
 ### Usage
 Once you have installed the MockLogger SDK and configured your environment, you can use it to log request and response data. Here are two ways to use the SDK:
+
+#### Set Environment Variables:
+
+Set the following environment variables in your application. You can obtain these values from your Mocklogger application:
+
+```dotenv
+MOCKLOGGER_HOST_URL=http://localhost:8000
+MOCKLOGGER_APP_ID="My Application"
+MOCKLOGGER_APP_KEY=c3ce75317d9c876d209a9f439b345345
+MOCKLOGGER_APP_API_TOKEN=EomxCzUG0HFukdRWgKL26ThXuRstFTW
+```
 
 #### Method 1: Using sendLog
 ```php
