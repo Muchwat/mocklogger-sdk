@@ -1,0 +1,37 @@
+{
+    "name": "moktech/mocklogger-sdk",
+    "description": "Mocklogger SDK is a Laravel package designed to facilitate effortless integration with the Mocklogger logging tool for developers.",
+    "keywords": [
+        "laravel",
+        "logging",
+        "requests",
+        "responses",
+        "mocklogger",
+        "mocklogger-sdk",
+        "debugging",
+        "development",
+        "http",
+        "middleware"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kevin Muchwat",
+            "email": "kevinmuchwat@gmail.com",
+            "homepage": "https://github.com/Muchwat"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Moktech\\MockLoggerSDK\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": "Moktech\\MockLoggerSDK\\MockloggerServiceProvider"
+        }
+    }
+}
