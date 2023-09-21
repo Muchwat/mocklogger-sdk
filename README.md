@@ -41,8 +41,7 @@ use Moktech\MockLoggerSDK\MockLogger;
 public function terminate($request, $response)
 {
     try {
-        $logger = new MockLogger();
-        $logger->sendLog($request, $response);
+        (new MockLogger())->sendLog($request, $response);
     } catch (\Throwable $th) {
         Log::info($th->getMessage());
     }
