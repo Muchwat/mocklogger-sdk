@@ -4,8 +4,8 @@
  * MockLogger class for logging request and response data.
  *
  * This class provides methods to capture and log data related to incoming HTTP requests
- * and their corresponding responses. It utilizes an instance of the AppConfig class for
- * configuration and an instance of the HttpLogger class for sending logs to a remote server.
+ * and their corresponding responses. It inherits the HttpLogger class for 
+ * sending logs to a remote server.
  *
  * Usage:
  * $logger = new MockLogger();
@@ -23,16 +23,6 @@ class MockLogger extends HttpLogger
     {
         parent::__construct(); // Call the parent constructor
     }
-
-    /**
-     * @var AppConfig $config An instance of AppConfig for configuration settings.
-     */
-    protected $config;
-
-    /**
-     * @var HttpLogger $logger An instance of HttpLogger for sending log data.
-     */
-    protected $logger;
 
     /**
      * Get request data to be logged.
