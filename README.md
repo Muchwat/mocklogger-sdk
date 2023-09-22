@@ -40,7 +40,7 @@ Use this in your Terminable Middleware (Sunctum protected URL).
 use Moktech\MockLoggerSDK\MockLogger;
 
 
-public function terminate($request, $response)
+public function terminate(Request $request, Response $response)
 {
     try {
         (new MockLogger())->sendLog($request, $response);
