@@ -37,6 +37,7 @@ class MockLogger extends HttpLogger
             'user' => $request->user(),
             'ip_address' => $request->ip(),
             'full_url' => $request->fullUrl(),
+            'route_name' => $request->route()->getName(),
             'method' => $request->method(),
             'payload' => $request->all(),
             'agent' => $request->userAgent(),
