@@ -81,5 +81,4 @@ $data = [
 
 $logger = new MockLogger();
 $logger->sendData($data);
-
 ```
