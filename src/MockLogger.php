@@ -1,13 +1,9 @@
 <?php
-
 namespace Moktech\MockLoggerSDK;
-
-
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\Client\Response as ClientResponse;
-
 
 /**
  * MockLogger class for logging request and response data.
@@ -19,7 +15,6 @@ use Illuminate\Http\Client\Response as ClientResponse;
  * @method array requestData(Request $request)
  * @method array responseData(Response $response)
  */
-
 class MockLogger extends HttpLogger
 {
     public function __construct()

@@ -5,7 +5,6 @@ namespace Moktech\MockLoggerSDK\Interfaces;
  * The Configuration interface defines methods for retrieving
  * configuration settings required by the MockLogger SDK.
  */
-
 interface Configuration
 {
     /**
