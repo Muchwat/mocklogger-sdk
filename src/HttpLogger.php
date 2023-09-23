@@ -20,17 +20,17 @@ class HttpLogger
     /**
      * @var string $apiKey The API key used for authentication when sending log data.
      */
-    protected $apiKey;
+    private $apiKey;
 
     /**
      * @var string $hostUrl The host URL to which log data will be sent.
      */
-    protected $hostUrl;
+    private $hostUrl;
 
     /**
      * @var string $appKey The application key used to identify the application.
      */
-    protected $appKey;
+    private $appKey;
 
     /**
      * HttpLogger constructor.
