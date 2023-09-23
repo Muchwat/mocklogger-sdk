@@ -41,12 +41,18 @@ class SdkConfig implements Configuration
      * Initializes the SdkConfig object by retrieving configuration values
      * from the Laravel configuration files.
      */
-    protected function __construct()
+    private function __construct()
     {
         $this->hostUrl = config('mocklogger.host_url');
         $this->appId = config('mocklogger.app_id');
         $this->appKey = config('mocklogger.app_key');
         $this->appApiToken = config('mocklogger.app_api_token');
+    }
+
+    // Create and return an instance of SdkConfig
+    public static function create(): self
+    {
+        return new self();
     }
 
     /**
