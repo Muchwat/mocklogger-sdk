@@ -34,12 +34,12 @@ class MockLogger extends HttpLogger
         return [
             'user' => $request->user(),
             'ip_address' => $request->ip(),
+            'base_url' =>$request->url(),
             'full_url' => $request->fullUrl(),
             'route_name' => $request->route()->getName(),
             'method' => $request->method(),
             'payload' => $request->all(),
             'agent' => $request->userAgent(),
-            'timestamp' => now(),
         ];
     }
 
@@ -57,7 +57,6 @@ class MockLogger extends HttpLogger
             'content' => $response->getContent(),
             'format' => $response->headers->get('content-type'),
             'location' => $response->headers->get('location'),
-            'timestamp' => now(),
         ];
     }
 
@@ -73,19 +72,18 @@ class MockLogger extends HttpLogger
      *                  'email' => 'kevinmuchwat@gmail.com',
      *              ],
      *              'ip_address' => $request->ip(),
+     *              'base_url' =>$request->url(),
      *              'full_url' => $request->fullUrl(),
      *              'route_name' => $request->route()->getName(),
      *              'method' => $request->method(),
      *              'payload' => $request->all(),
      *              'agent' => $request->userAgent(),
-     *              'timestamp' => now(),
      *     ],
      *     "response" => [
      *         'status_code' => $response->getStatusCode(),
      *         'content' => $response->getContent(),
      *         'format' => $response->headers->get('content-type'),
      *         'location' => $response->headers->get('location'),
-     *         'timestamp' => now(),
      *     ],
      * ]
      * @return \Illuminate\Http\Client\Response
