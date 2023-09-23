@@ -32,7 +32,9 @@ class MockLogger extends HttpLogger
     public function requestData(Request $request): array
     {
         return [
-            'user' => $request->user(),
+            'user' => $request->user()->only(
+                ['name', 'email']
+            ),
             'ip_address' => $request->ip(),
             'full_url' => $request->fullUrl(),
             'route_name' => $request->route()->getName(),
@@ -68,14 +70,14 @@ class MockLogger extends HttpLogger
      *     "request" => [
      *         'user' => [
      *             'name' => 'Kevin Muchwat',
-     *                  'email' => 'kevinmuchwat@gmail.com',
-     *              ],
-     *              'ip_address' => $request->ip(),
-     *              'full_url' => $request->fullUrl(),
-     *              'route_name' => $request->route()->getName(),
-     *              'method' => $request->method(),
-     *              'payload' => $request->all(),
-     *              'agent' => $request->userAgent(),
+     *             'email' => 'kevinmuchwat@gmail.com',
+     *          ],
+     *         'ip_address' => $request->ip(),
+     *         'full_url' => $request->fullUrl(),
+     *         'route_name' => $request->route()->getName(),
+     *         'method' => $request->method(),
+     *         'payload' => $request->all(),
+     *         'agent' => $request->userAgent(),
      *     ],
      *     "response" => [
      *         'status_code' => $response->getStatusCode(),
