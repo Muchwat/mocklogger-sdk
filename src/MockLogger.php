@@ -17,7 +17,7 @@ use Illuminate\Http\Client\Response as ClientResponse;
  */
 class MockLogger extends HttpLogger
 {
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct(new SdkConfig()); // Call the parent constructor and inject the configuration class
     }
