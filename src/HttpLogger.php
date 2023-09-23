@@ -71,9 +71,9 @@ class HttpLogger
      *
      * @throws \Exception If the API credentials are not set.
      * 
-     * @return \Illuminate\Http\Client\Response=
+     * @return \Illuminate\Http\Client\Response
      */
-    private function log(array $data): Response
+    public function log(array $data): Response
     {
         // Check if API key, app key, and host URL are set
         if (!$this->apiKey || !$this->appKey || !$this->hostUrl) {
