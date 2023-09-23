@@ -10,7 +10,7 @@ use Moktech\MockLoggerSDK\Interfaces\Configuration;
  *
  * This class allows you to send log data to a specified host URL using
  * Laravel's HTTP client. It requires an API key and other configuration
- * parameters provided by an instance of the SdkConfig class.
+ * parameters provided by an instance of the Configuration class.
  * 
  * @method array getPerformanceInfo()
  * @method log(array $data)
@@ -35,9 +35,9 @@ class HttpLogger
     /**
      * HttpLogger constructor.
      *
-     * Initializes the HttpLogger with configuration values from an instance of SdkConfig.
+     * Initializes the HttpLogger with configuration values from an instance of Configuration.
      *
-     * @param Configuration $config An instance of SdkConfig containing configuration settings.
+     * @param Configuration $config An instance of Configuration containing configuration settings.
      */
     protected function __construct(Configuration $config)
     {

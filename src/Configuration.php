@@ -1,9 +1,8 @@
 <?php
 namespace Moktech\MockLoggerSDK;
-use Moktech\MockLoggerSDK\Interfaces\Configuration;
 
 /**
- * SdkConfig class for managing MockLogger SDK configuration settings.
+ * Configuration class for managing MockLogger SDK configuration settings.
  *
  * This class provides a convenient way to access configuration settings
  * such as the MockLogger application host URL, application ID, application key, and API token.
@@ -13,7 +12,7 @@ use Moktech\MockLoggerSDK\Interfaces\Configuration;
  * @method string getAppKey()
  * @method string getAppApiToken()
  */
-class SdkConfig implements Configuration
+class Configuration
 {
     /**
      * @var string $hostUrl The MockLogger Application host URL for the SDK.
@@ -36,9 +35,9 @@ class SdkConfig implements Configuration
     private string $appApiToken;
 
     /**
-     * SdkConfig constructor.
+     * Configuration constructor.
      *
-     * Initializes the SdkConfig object by retrieving configuration values
+     * Initializes the Configuration object by retrieving configuration values
      * from the mocklogger.php configuration file.
      */
     private function __construct()
@@ -49,7 +48,7 @@ class SdkConfig implements Configuration
         $this->appApiToken = config('mocklogger.app_api_token');
     }
 
-    // Create and return an instance of SdkConfig
+    // Create and return an instance of Configuration
     public static function create(): self
     {
         return new self();
@@ -60,7 +59,7 @@ class SdkConfig implements Configuration
      *
      * @return string The host URL.
      */
-    public function getHostUrl(): string
+    protected function getHostUrl(): string
     {
         return $this->hostUrl;
     }
@@ -70,7 +69,7 @@ class SdkConfig implements Configuration
      *
      * @return string The application ID.
      */
-    public function getAppId(): string
+    protected function getAppId(): string
     {
         return $this->appId;
     }
@@ -80,7 +79,7 @@ class SdkConfig implements Configuration
      *
      * @return string The application key.
      */
-    public function getAppKey(): string
+    protected function getAppKey(): string
     {
         return $this->appKey;
     }
@@ -90,7 +89,7 @@ class SdkConfig implements Configuration
      *
      * @return string The API token.
      */
-    public function getAppApiToken(): string
+    protected function getAppApiToken(): string
     {
         return $this->appApiToken;
     }
