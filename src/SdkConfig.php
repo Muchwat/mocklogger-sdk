@@ -39,7 +39,7 @@ class SdkConfig implements Configuration
      * SdkConfig constructor.
      *
      * Initializes the SdkConfig object by retrieving configuration values
-     * from the Laravel configuration files.
+     * from the mocklogger.php configuration file.
      */
     private function __construct()
     {
