@@ -15,7 +15,7 @@ use Moktech\MockLoggerSDK\Configuration;
  * @method array getPerformanceInfo()
  * @method log(array $data)
  */
-class HttpLogger extends Configuration
+class HttpLogger
 {
     /**
      * @var string $apiKey The API key used for authentication when sending log data.
