@@ -73,7 +73,7 @@ class HttpLogger
      * 
      * @return \Illuminate\Http\Client\Response=
      */
-    public function log(array $data): Response
+    private function log(array $data): Response
     {
         // Check if API key, app key, and host URL are set
         if (!$this->apiKey || !$this->appKey || !$this->hostUrl) {
