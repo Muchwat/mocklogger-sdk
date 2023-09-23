@@ -71,7 +71,7 @@ class HttpLogger
      *
      * @throws \Exception If the API credentials are not set.
      * 
-     * @return \Illuminate\Http\Client\Response
+     * @return \Illuminate\Http\Client\Response=
      */
     public function log(array $data): Response
     {

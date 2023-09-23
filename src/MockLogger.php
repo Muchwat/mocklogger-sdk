@@ -34,7 +34,6 @@ class MockLogger extends HttpLogger
         return [
             'user' => $request->user(),
             'ip_address' => $request->ip(),
-            'base_url' =>$request->url(),
             'full_url' => $request->fullUrl(),
             'route_name' => $request->route()->getName(),
             'method' => $request->method(),
@@ -72,7 +71,6 @@ class MockLogger extends HttpLogger
      *                  'email' => 'kevinmuchwat@gmail.com',
      *              ],
      *              'ip_address' => $request->ip(),
-     *              'base_url' =>$request->url(),
      *              'full_url' => $request->fullUrl(),
      *              'route_name' => $request->route()->getName(),
      *              'method' => $request->method(),
