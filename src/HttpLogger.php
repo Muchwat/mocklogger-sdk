@@ -39,7 +39,7 @@ class HttpLogger
      *
      * @param Configuration $config An instance of SdkConfig containing configuration settings.
      */
-    public function __construct(Configuration $config)
+    protected function __construct(Configuration $config)
     {
         $this->apiKey = $config->getAppApiToken();
         $this->hostUrl = $config->getHostUrl();
