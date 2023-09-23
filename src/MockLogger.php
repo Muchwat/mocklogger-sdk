@@ -18,8 +18,9 @@ use Illuminate\Http\Client\Response as ClientResponse;
 class MockLogger extends HttpLogger
 {
     public function __construct()
-    {
-        parent::__construct(Configuration::getInstance()); // Call the parent constructor and inject the configuration class
+    {   
+        // Call the parent constructor and inject the instance of the configuration class
+        parent::__construct(Configuration::getInstance()); 
     }
 
     /**
