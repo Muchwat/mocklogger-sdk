@@ -1,4 +1,5 @@
 <?php
+
 namespace Moktech\MockLoggerSDK;
 
 /**
@@ -14,6 +15,11 @@ namespace Moktech\MockLoggerSDK;
  */
 class Configuration
 {
+    /**
+     * @var Configuration|null The instance of the Configuration class.
+     */
+    private static ?Configuration $instance = null;
+
     /**
      * @var string $hostUrl The MockLogger Application host URL for the SDK.
      */
@@ -48,10 +54,18 @@ class Configuration
         $this->appApiToken = config('mocklogger.app_api_token');
     }
 
-    // Create and return an instance of Configuration
-    public static function create(): self
+    /**
+     * Get or create an instance of the Configuration class.
+     *
+     * @return Configuration The instance of the Configuration class.
+     */
+    public static function getInstance(): Configuration
     {
-        return new self();
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -59,7 +73,7 @@ class Configuration
      *
      * @return string The host URL.
      */
-    protected function getHostUrl(): string
+    public function getHostUrl(): string
     {
         return $this->hostUrl;
     }
@@ -69,7 +83,7 @@ class Configuration
      *
      * @return string The application ID.
      */
-    protected function getAppId(): string
+    public function getAppId(): string
     {
         return $this->appId;
     }
@@ -79,7 +93,7 @@ class Configuration
      *
      * @return string The application key.
      */
-    protected function getAppKey(): string
+    public function getAppKey(): string
     {
         return $this->appKey;
     }
@@ -89,7 +103,7 @@ class Configuration
      *
      * @return string The API token.
      */
-    protected function getAppApiToken(): string
+    public function getAppApiToken(): string
     {
         return $this->appApiToken;
     }
