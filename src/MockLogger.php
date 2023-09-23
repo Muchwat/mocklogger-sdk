@@ -32,9 +32,7 @@ class MockLogger extends HttpLogger
     public function requestData(Request $request): array
     {
         return [
-            'user' => $request->user()->only(
-                ['name', 'email']
-            ),
+            'user' => $request->user()->only(['name', 'email']),
             'ip_address' => $request->ip(),
             'full_url' => $request->fullUrl(),
             'route_name' => $request->route()->getName(),

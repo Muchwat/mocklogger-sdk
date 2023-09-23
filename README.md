@@ -39,7 +39,6 @@ Use this in your Terminable Middleware (Sunctum protected URL).
 ```php
 use Moktech\MockLoggerSDK\MockLogger;
 
-
 public function terminate(Request $request, Response $response)
 {
     try {
