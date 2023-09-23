@@ -3,7 +3,7 @@ namespace Moktech\MockLoggerSDK;
 use Moktech\MockLoggerSDK\Interfaces\Configuration;
 
 /**
- * AppConfig class for managing MockLogger SDK configuration settings.
+ * SdkConfig class for managing MockLogger SDK configuration settings.
  *
  * This class provides a convenient way to access configuration settings
  * such as the MockLogger application host URL, application ID, application key, and API token.
@@ -13,7 +13,7 @@ use Moktech\MockLoggerSDK\Interfaces\Configuration;
  * @method string getAppKey()
  * @method string getAppApiToken()
  */
-class AppConfig implements Configuration
+class SdkConfig implements Configuration
 {
     /**
      * @var string $hostUrl The MockLogger Application host URL for the SDK.
@@ -36,9 +36,9 @@ class AppConfig implements Configuration
     private string $appApiToken;
 
     /**
-     * AppConfig constructor.
+     * SdkConfig constructor.
      *
-     * Initializes the AppConfig object by retrieving configuration values
+     * Initializes the SdkConfig object by retrieving configuration values
      * from the Laravel configuration files.
      */
     public function __construct()
