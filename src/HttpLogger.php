@@ -56,12 +56,12 @@ class HttpLogger
         $usage = getrusage();
 
         // CPU time used by the current script in seconds
-        $cpuUsage = $usage['ru_utime.tv_sec'] + ($usage['ru_utime.tv_usec'] / 1000000);
+        $cpu = $usage['ru_utime.tv_sec'] + ($usage['ru_utime.tv_usec'] / 1000000);
 
         // Maximum resident set size (memory usage) in kilobytes
-        $memoryUsage = $usage['ru_maxrss'];
+        $memory = $usage['ru_maxrss'];
 
-        return ["cpu" => $cpuUsage, "memory" => $memoryUsage];
+        return ["cpu" => $cpu, "memory" => $memory];
     }
 
     /**
