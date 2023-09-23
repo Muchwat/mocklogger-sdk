@@ -3,7 +3,7 @@ namespace Moktech\MockLoggerSDK;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Moktech\MockLoggerSDK\Interfaces\Configuration;
+use Moktech\MockLoggerSDK\Configuration;
 
 /**
  * HttpLogger class for logging data to a remote server using HTTP requests.
