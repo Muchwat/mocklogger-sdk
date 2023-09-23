@@ -1,4 +1,9 @@
 <?php
+namespace Moktech\MockLoggerSDK;
+
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Moktech\MockLoggerSDK\Interfaces\Configuration;
 
 /**
  * HttpLogger class for logging data to a remote server using HTTP requests.
@@ -6,21 +11,12 @@
  * This class allows you to send log data to a specified host URL using
  * Laravel's HTTP client. It requires an API key and other configuration
  * parameters provided by an instance of the AppConfig class.
- *
+ * 
+ * @method array getPerformanceInfo()
+ * @method log(array $data)
  */
-
-namespace Moktech\MockLoggerSDK;
-
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Http;
-
 class HttpLogger
 {
-    /**
-     * @var AppConfig $config An instance of AppConfig for configuration settings.
-     */
-    protected $config;
-
     /**
      * @var string $apiKey The API key used for authentication when sending log data.
      */
@@ -41,14 +37,13 @@ class HttpLogger
      *
      * Initializes the HttpLogger with configuration values from an instance of AppConfig.
      *
-     * @param AppConfig $config An instance of AppConfig containing configuration settings.
+     * @param Configuration $config An instance of AppConfig containing configuration settings.
      */
-    public function __construct()
+    public function __construct(Configuration $config)
     {
-        $this->config = new AppConfig();
-        $this->apiKey = $this->config->getAppApiToken();
-        $this->hostUrl = $this->config->getHostUrl();
-        $this->appKey = $this->config->getAppKey();
+        $this->apiKey = $config->getAppApiToken();
+        $this->hostUrl = $config->getHostUrl();
+        $this->appKey = $config->getAppKey();
     }
 
     /**
@@ -82,7 +77,7 @@ class HttpLogger
     {
         // Check if API key, app key, and host URL are set
         if (!$this->apiKey || !$this->appKey || !$this->hostUrl) {
-            throw new \Exception('API credentials must be set.');
+            throw new \Exception('Environment variables must be set and valid!');
         }
 
         return Http::withHeaders([

@@ -1,25 +1,22 @@
 <?php
+namespace Moktech\MockLoggerSDK;
+use Moktech\MockLoggerSDK\Interfaces\Configuration;
 
 /**
- * AppConfig class for managing application configuration settings.
+ * AppConfig class for managing MockLogger SDK configuration settings.
  *
  * This class provides a convenient way to access configuration settings
- * such as the host URL, application ID, application key, and API token.
- *
- * Usage:
- * $config = new AppConfig();
- * $hostUrl = $config->getHostUrl();
- * $appId = $config->getAppId();
- * $appKey = $config->getAppKey();
- * $appApiToken = $config->getAppApiToken();
+ * such as the MockLogger application host URL, application ID, application key, and API token.
+ * 
+ * @method string getHostUrl()
+ * @method string getAppId()
+ * @method string getAppKey()
+ * @method string getAppApiToken()
  */
-
-namespace Moktech\MockLoggerSDK;
-
-class AppConfig
+class AppConfig implements Configuration
 {
     /**
-     * @var string $hostUrl The host URL for the application.
+     * @var string $hostUrl The MockLogger Application host URL for the SDK.
      */
     private string $hostUrl;
 

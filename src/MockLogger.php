@@ -1,27 +1,30 @@
 <?php
 
+namespace Moktech\MockLoggerSDK;
+
+
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\Client\Response as ClientResponse;
+
+
 /**
  * MockLogger class for logging request and response data.
  *
  * This class provides methods to capture and log data related to incoming HTTP requests
  * and their corresponding responses. It inherits the HttpLogger class for 
  * sending logs to a remote server.
- *
- * Usage:
- * $logger = new MockLogger();
- * $logger->sendLog($request, $response);
+ * 
+ * @method array requestData(Request $request)
+ * @method array responseData(Response $response)
  */
-
-namespace Moktech\MockLoggerSDK;
-
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class MockLogger extends HttpLogger
 {
     public function __construct()
     {
-        parent::__construct(); // Call the parent constructor
+        parent::__construct(new AppConfig()); // Call the parent constructor and inject the configuration class
     }
 
     /**
@@ -66,11 +69,34 @@ class MockLogger extends HttpLogger
     /**
      * Log data to the remote server.
      *
-     * @param array $data The data to be logged.
+     * @param array $data An associative array containing the data to be logged.
+     * It should have the following structure:
+     * [
+     *     "request" => [
+     *         'user' => [
+     *             'name' => 'Kevin Muchwat',
+     *                  'email' => 'kevinmuchwat@gmail.com',
+     *              ],
+     *              'ip_address' => $request->ip(),
+     *              'full_url' => $request->fullUrl(),
+     *              'route_name' => $request->route()->getName(),
+     *              'method' => $request->method(),
+     *              'payload' => $request->all(),
+     *              'agent' => $request->userAgent(),
+     *              'timestamp' => now(),
+     *     ],
+     *     "response" => [
+     *         'status_code' => $response->getStatusCode(),
+     *         'content' => $response->getContent(),
+     *         'format' => $response->headers->get('content-type'),
+     *         'location' => $response->headers->get('location'),
+     *         'timestamp' => now(),
+     *     ],
+     * ]
      * @return \Illuminate\Http\Client\Response
      */
-    public function sendLogData(array $data = []): \Illuminate\Http\Client\Response
-    {   
+    public function sendLogData(array $data = []): ClientResponse
+    {
         return $this->log($data);
     }
 
@@ -81,7 +107,7 @@ class MockLogger extends HttpLogger
      * @param Response $response The HTTP response.
      * @return \Illuminate\Http\Client\Response
      */
-    public function sendLog(Request $request, Response $response): \Illuminate\Http\Client\Response
+    public function sendLog(Request $request, Response $response): ClientResponse
     {
         $data = [
             "request" => $this->requestData($request),
