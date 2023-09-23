@@ -12,8 +12,8 @@ use Illuminate\Http\Client\Response as ClientResponse;
  * and their corresponding responses. It inherits the HttpLogger class for 
  * sending logs to a remote server.
  * 
- * @method array requestData(Request $request)
- * @method array responseData(Response $response)
+ * @method \Illuminate\Http\Client\Response sendLogData(Request $request)
+ * @method \Illuminate\Http\Client\Response sendLog(Response $response)
  */
 class MockLogger extends HttpLogger
 {
@@ -29,7 +29,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing request-related data.
      */
-    public function requestData(Request $request): array
+    private function requestData(Request $request): array
     {
         return [
             'user' => $request->user()->only(['name', 'email']),
@@ -49,7 +49,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing response-related data.
      */
-    public function responseData(Response $response): array
+    private function responseData(Response $response): array
     {
         return [
             'status_code' => $response->getStatusCode(),
