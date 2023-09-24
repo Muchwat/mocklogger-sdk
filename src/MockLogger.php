@@ -30,7 +30,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing request-related data.
      */
-    protected function requestData(Request $request): array
+    private function requestData(Request $request): array
     {
         return [
             'user' => $request->user()->only(['name', 'email']),
@@ -50,7 +50,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing response-related data.
      */
-    protected function responseData(Response $response): array
+    private function responseData(Response $response): array
     {
         return [
             'status_code' => $response->getStatusCode(),

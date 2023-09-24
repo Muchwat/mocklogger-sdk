@@ -51,7 +51,7 @@ class HttpLogger
      *
      * @return array An associative array containing CPU and memory usage information.
      */
-    protected function getPerformanceInfo(): array
+    private function getPerformanceInfo(): array
     {
         $usage = getrusage();
 
