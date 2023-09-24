@@ -67,14 +67,12 @@ $data = [
         'method' => $request->method(),
         'payload' => $request->all(),
         'agent' => $request->userAgent(),
-        'timestamp' => now(),
     ],
     "response" => [
         'status_code' => $response->getStatusCode(),
         'content' => $response->getContent(),
         'format' => $response->headers->get('content-type'),
         'location' => $response->headers->get('location'),
-        'timestamp' => now(),
     ],
 ];
 

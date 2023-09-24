@@ -12,7 +12,6 @@ use Moktech\MockLoggerSDK\Configuration;
  * Laravel's HTTP client. It requires an API key and other configuration
  * parameters provided by an instance of the Configuration class.
  * 
- * @method array getPerformanceInfo()
  * @method log(array $data)
  */
 class HttpLogger
