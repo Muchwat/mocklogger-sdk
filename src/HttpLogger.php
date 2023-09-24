@@ -85,9 +85,8 @@ class HttpLogger
      */
     protected function log(array $data): Response
     {
-        // Check if API key, app key, and host URL are set
-        if (!$this->apiKey || !$this->appKey || !$this->hostUrl) {
-            throw new \Exception('Environment variables must be set and valid!');
+        if (!isset($this->apiKey, $this->appKey, $this->hostUrl)) {
+            throw new \Exception('Environment variables are not valid!');
         }
 
         return Http::withHeaders([
