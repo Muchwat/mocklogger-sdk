@@ -1,5 +1,4 @@
 <?php
-
 namespace Moktech\MockLoggerSDK;
 
 /**

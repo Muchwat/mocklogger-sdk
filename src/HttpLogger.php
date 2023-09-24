@@ -50,7 +50,7 @@ class HttpLogger
      *
      * @return array An associative array containing CPU and memory usage information.
      */
-    private function getPerformanceInfo(): array
+    private function getUsage(): array
     {
         $usage = getrusage();
 
@@ -83,7 +83,7 @@ class HttpLogger
             'X-Api-Key' => $this->apiKey,
         ])->post("$this->hostUrl/api/log/$this->appKey", [
             'data' => $data,
-            'usage' => $this->getPerformanceInfo(),
+            'usage' => $this->getUsage(),
             'timestamp' => now(),
         ]);
     }
