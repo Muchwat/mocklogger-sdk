@@ -37,7 +37,7 @@ class HttpLogger
      *
      * Initializes the HttpLogger with configuration values from an instance of Configuration.
      *
-     * @param Configuration $config An instance of Configuration containing configuration settings.
+     * @param Configuration $config An instance of Configuration class.
      */
     protected function __construct(Configuration $config)
     {
@@ -82,9 +82,8 @@ class HttpLogger
 
         return Http::withHeaders([
             'X-Api-Key' => $this->apiKey,
-        ])->post("$this->hostUrl/api/log/track", [
+        ])->post("$this->hostUrl/api/log/$this->appKey", [
             'data' => $data,
-            'app_key' => $this->appKey,
             'usage' => $this->getPerformanceInfo(),
             'timestamp' => now(),
         ]);

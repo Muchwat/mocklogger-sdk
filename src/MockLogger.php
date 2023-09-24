@@ -19,7 +19,7 @@ class MockLogger extends HttpLogger
 {
     public function __construct()
     {   
-        // Call the parent constructor and inject the instance of the configuration class
+        // Call the parent constructor and inject the instance of the Configuration class
         parent::__construct(Configuration::getInstance()); 
     }
 
