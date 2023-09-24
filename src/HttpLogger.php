@@ -56,11 +56,22 @@ class HttpLogger
 
         // CPU time used by the current script in seconds
         $cpu = $usage['ru_utime.tv_sec'] + ($usage['ru_utime.tv_usec'] / 1000000);
-
+        
         // Maximum resident set size (memory usage) in kilobytes
         $memory = $usage['ru_maxrss'];
 
-        return ["cpu" => $cpu, "memory" => $memory];
+        // Peak memory usage in kilobytes
+        $peakMemory = memory_get_peak_usage(true) / 1024;
+        
+        // Total execution time
+        $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+
+        return [
+            "cpu" => $cpu,
+            "memory" => $memory,
+            'peak_memory' => $peakMemory,
+            "execution_time" => $executionTime,
+        ];
     }
 
     /**
