@@ -88,13 +88,12 @@ class HttpLogger
         if (!isset($this->apiKey, $this->appKey, $this->hostUrl)) {
             throw new \Exception('Environment variables are not valid!');
         }
+        
+        $data['usage'] = $this->getResourceUsage();
+        $data['timestamp'] = now();
 
         return Http::withHeaders([
             'X-Api-Key' => $this->apiKey,
-        ])->post("$this->hostUrl/api/log/$this->appKey", [
-            'data' => $data,
-            'usage' => $this->getResourceUsage(),
-            'timestamp' => now(),
-        ]);
+        ])->post("$this->hostUrl/api/log/$this->appKey", $data);
     }
 }
