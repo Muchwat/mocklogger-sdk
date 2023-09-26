@@ -20,6 +20,16 @@ Publish the MockLogger SDK configuration file using Artisan:
 php artisan vendor:publish --tag=mocklogger-config
 ```
 
+#### Registrater Service Provider:
+Open the config/app.php file and add the service provider to the providers array:
+
+```php
+'providers' => [
+    // ...
+    Moktech\MockLoggerSDK\MockloggerServiceProvider::class,
+],
+```
+
 #### Set Environment Variables:
 Set the following environment variables in your application. You can obtain these values from your Mocklogger application:
 

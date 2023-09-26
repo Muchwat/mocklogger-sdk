@@ -10,7 +10,6 @@
         "mocklogger",
         "mocklogger-sdk",
         "debugging",
-        "development",
         "http",
         "middleware"
     ],
