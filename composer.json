@@ -33,7 +33,9 @@
     },
     "extra": {
         "laravel": {
-            "providers": "Moktech\\MockLoggerSDK\\MockloggerServiceProvider"
+            "providers": [
+                "Moktech\\MockLoggerSDK\\MockloggerServiceProvider"
+            ]
         }
     }
 }

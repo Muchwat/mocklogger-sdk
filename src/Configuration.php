@@ -22,22 +22,22 @@ class Configuration
     /**
      * @var string $hostUrl The MockLogger Application host URL for the SDK.
      */
-    private string $hostUrl;
+    protected string $hostUrl;
 
     /**
      * @var string $appId The application ID.
      */
-    private string $appId;
+    protected string $appId;
 
     /**
      * @var string $appKey The application key.
      */
-    private string $appKey;
+    protected string $appKey;
 
     /**
      * @var string $appApiToken The API token for the application.
      */
-    private string $appApiToken;
+    protected string $appApiToken;
 
     /**
      * Configuration constructor.
@@ -72,7 +72,7 @@ class Configuration
      *
      * @return string The host URL.
      */
-    public function getHostUrl(): string
+    protected function getHostUrl(): string
     {
         return $this->hostUrl;
     }
@@ -82,7 +82,7 @@ class Configuration
      *
      * @return string The application ID.
      */
-    public function getAppId(): string
+    protected function getAppId(): string
     {
         return $this->appId;
     }
@@ -92,7 +92,7 @@ class Configuration
      *
      * @return string The application key.
      */
-    public function getAppKey(): string
+    protected function getAppKey(): string
     {
         return $this->appKey;
     }
@@ -102,7 +102,7 @@ class Configuration
      *
      * @return string The API token.
      */
-    public function getAppApiToken(): string
+    protected function getAppApiToken(): string
     {
         return $this->appApiToken;
     }
