@@ -49,12 +49,28 @@ Use this in your Terminable Middleware (Sunctum protected URL).
 ```php
 use Moktech\MockLoggerSDK\MockLogger;
 
-public function terminate(Request $request, Response $response)
+class TerminableMiddleware
 {
-    try {
-        (new MockLogger())->sendLog($request, $response);
-    } catch (\Throwable $th) {
-        Log::info($th->getMessage());
+    protected $logger;
+
+    public function __construct(MockLogger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+
+    public function handle(Request $request, Closure $next): Response
+    {
+        return $next($request);
+    }
+
+    public function terminate(Request $request, Response $response)
+    {  
+        try {
+            $this->logger->sendLog($request, $response);
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+        }
     }
 }
 ```
