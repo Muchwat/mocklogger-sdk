@@ -21,7 +21,7 @@ php artisan vendor:publish --tag=mocklogger-config
 ```
 
 #### Registrater Service Provider:
-Open the config/app.php file and add the service provider to the providers array:
+Open the `config/app.php` file and add the service provider to the providers array:
 
 ```php
 'providers' => [
@@ -31,7 +31,7 @@ Open the config/app.php file and add the service provider to the providers array
 ```
 
 #### Set Environment Variables:
-Set the following environment variables in your application. You can obtain these values from your Mocklogger application:
+Set the following environment variables in your application's `.env`. You can obtain these values from your Mocklogger application:
 
 ```dotenv
 MOCKLOGGER_HOST_URL=http://localhost:8000
