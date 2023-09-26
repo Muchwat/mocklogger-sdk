@@ -58,7 +58,6 @@ class TerminableMiddleware
         $this->logger = $logger;
     }
 
-
     public function handle(Request $request, Closure $next): Response
     {
         return $next($request);
