@@ -20,7 +20,7 @@ Publish the MockLogger SDK configuration file using Artisan:
 php artisan vendor:publish --tag=mocklogger-config
 ```
 
-#### Registrater Service Provider:
+#### Register Service Provider:
 Open the `config/app.php` file and add the service provider to the providers array:
 
 ```php
