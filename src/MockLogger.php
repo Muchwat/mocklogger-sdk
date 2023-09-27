@@ -30,7 +30,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing request-related data.
      */
-    private function requestData(Request $request): array
+    private function request(Request $request): array
     {
         return [
             'user' => $request->user()->only(['name', 'email']),
@@ -50,7 +50,7 @@ class MockLogger extends HttpLogger
      *
      * @return array An associative array containing response-related data.
      */
-    private function responseData(Response $response): array
+    private function response(Response $response): array
     {
         return [
             'status_code' => $response->getStatusCode(),
@@ -102,8 +102,8 @@ class MockLogger extends HttpLogger
     public function sendLog(Request $request, Response $response): ClientResponse
     {
         $data = [
-            "request" => $this->requestData($request),
-            "response" => $this->responseData($response),
+            "request" => $this->request($request),
+            "response" => $this->response($response),
         ];
 
         // Use logger to send logs to the server
