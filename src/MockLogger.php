@@ -88,7 +88,8 @@ class MockLogger extends HttpLogger
      * @return \Illuminate\Http\Client\Response
      */
     public function sendLogData(array $data = []): ClientResponse
-    {
+    {   
+        // Use log to send logs to the server
         return $this->log($data);
     }
 
@@ -106,7 +107,7 @@ class MockLogger extends HttpLogger
             "response" => $this->response($response),
         ];
 
-        // Use logger to send logs to the server
+        // Use log to send logs to the server
         return $this->log($data);
     }
 }
