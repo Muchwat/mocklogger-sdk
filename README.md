@@ -1,5 +1,5 @@
 ## MockLogger SDK Documentation
-The MockLogger SDK offers functionality for logging request and response data of a Laravel application. This SDK provides methods to capture and log data pertaining to incoming HTTP requests and their associated responses.
+MockLogger SDK offers functionality for logging request and response data of a Laravel application. This SDK provides methods to capture and log data pertaining to incoming HTTP requests and their associated responses.
 
 With the MockLogger SDK, you can easily capture and log data from HTTP requests and responses, helping you monitor and analyze your application's interactions with external services and users actions.
 
