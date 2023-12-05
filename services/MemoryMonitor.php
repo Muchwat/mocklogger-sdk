@@ -14,8 +14,10 @@ class MemoryMonitor
      *
      * @return string The memory usage percentage formatted with two decimal places.
      */
-    public static function getValue(): string
+    public static function getValue(): ?string
     {   
+        if (PHP_OS !== 'Linux') { return null; }
+
         $command = "free | grep Mem | awk '{print $3/$2 * 100.0}'";
         return number_format(shell_exec($command), 2) . '%';
     }

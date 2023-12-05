@@ -14,8 +14,10 @@ class WebServerMonitor
      *
      * @return string The status of the web server.
      */
-    public static function getValue(): string
-    {
+    public static function getValue(): ?string
+    {   
+        if (PHP_OS !== 'Linux') { return null; }
+        
         // Get the configured web server name
         $webServerName = config('mocklogger.web_server');
 

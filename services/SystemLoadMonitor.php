@@ -14,8 +14,10 @@ class SystemLoadMonitor
      *
      * @return string The overall system load value.
      */
-    public static function getValue(): string
-    {
+    public static function getValue(): ?string
+    {   
+        if (PHP_OS !== 'Linux') { return null; }
+        
         // Get the system load average
         $loadAverage = sys_getloadavg();
 
