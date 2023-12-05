@@ -2,7 +2,6 @@
 
 namespace Moktech\MockLoggerSDK;
 
-use Moktech\MockLoggerSDK\Commands\Monitor;
 use Illuminate\Support\ServiceProvider;
 
 class MockloggerServiceProvider extends ServiceProvider
@@ -19,12 +18,5 @@ class MockloggerServiceProvider extends ServiceProvider
         $this->app->singleton(MockLogger::class, function () {
             return new MockLogger();
         });
-
-        // Register the command
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Monitor::class,
-            ]);
-        }
     }
 }
