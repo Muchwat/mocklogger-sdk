@@ -30,7 +30,7 @@
             "Moktech\\MockLoggerSDK\\": "src/"
         },
         "classmap": [
-            "src/commands"
+            "commands"
         ]
     },
     "extra": {
