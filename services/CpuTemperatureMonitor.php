@@ -14,7 +14,7 @@ class CpuTemperatureMonitor
      *
      * @return string The CPU temperature information.
      */
-    public static function getValue(): string
+    public static function getValue(): ?string
     {
         // Execute the command to get CPU temperature using lm-sensors
         $temperature = shell_exec('sensors | grep "Core 0"');
