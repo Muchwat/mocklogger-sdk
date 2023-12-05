@@ -4,6 +4,7 @@ namespace Moktech\MockLoggerSDK\Commands;
 
 use Illuminate\Console\Command;
 use Moktech\MockLoggerSDK\MockLogger;
+use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 
 class Monitor extends Command
 {
@@ -16,11 +17,12 @@ class Monitor extends Command
             // Instantiate MockLogger
             $mockLogger = app(MockLogger::class);
 
-            // Prepare data to be sent
+            // Prepare monitor values to be sent
             $data = [
-                'monitor' => 'test',
+                'monitor_values' => MonitorManagerService::getValues(),
             ];
-
+            
+            var_dump($data);
             // Send data using MockLogger
             $response = $mockLogger->sendLogData($data);
 
