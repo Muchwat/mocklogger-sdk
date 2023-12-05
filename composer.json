@@ -28,7 +28,10 @@
     "autoload": {
         "psr-4": {
             "Moktech\\MockLoggerSDK\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/commands"
+        ]
     },
     "extra": {
         "laravel": {

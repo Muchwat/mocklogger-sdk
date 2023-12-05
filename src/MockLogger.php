@@ -39,6 +39,7 @@ class MockLogger extends HttpLogger
             'route_name' => $request->route()->getName(),
             'method' => $request->method(),
             'payload' => $request->all(),
+            'origin' => $request->header('Origin'),
             'agent' => $request->userAgent(),
         ];
     }
@@ -76,6 +77,7 @@ class MockLogger extends HttpLogger
      *         'route_name' => $request->route()->getName(),
      *         'method' => $request->method(),
      *         'payload' => $request->all(),
+     *         'origin' => $request->header('Origin'),
      *         'agent' => $request->userAgent(),
      *     ],
      *     "response" => [
