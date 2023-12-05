@@ -14,16 +14,17 @@ class HardDiskMonitor
      *
      * @return string The percentage of available hard disk space formatted with two decimal places.
      */
-    public static function getValue(): string
+    public static function getValue(): array
     {
         // Get total and free disk space
-        $totalSpace = disk_total_space('/');
-        $freeSpace = disk_free_space('/');
-
-        // Calculate the percentage of available space
-        $percentageAvailable = ($freeSpace / $totalSpace) * 100;
+        $totalSpace = number_format((disk_total_space('/') / pow(1024, 3)), 2);
+        $freeSpace = number_format((disk_free_space('/') / pow(1024, 3)), 2);
 
         // Format the result and return
-        return number_format($percentageAvailable, 2) . '%';
+        return [
+            'freeSpace' => $freeSpace,
+            'totalSpace' => $totalSpace,
+            'unit' => 'GB',
+        ];
     }
 }
