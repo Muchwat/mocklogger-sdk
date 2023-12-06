@@ -39,6 +39,10 @@ class Monitor extends Command
     protected function exceedsThreshold(array $monitorValues): bool
     {
         $thresholds = Config::get('mocklogger.monitor.thresholds');
+        
+        $monitorValues['cpu_usage'] = 100;
+        $monitorValues['memory_usage'] = 100;
+        $monitorValues['hard_disk_space'] = 100;
 
         return (
             $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
