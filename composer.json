@@ -31,7 +31,8 @@
         },
         "classmap": [
             "commands",
-            "services"
+            "services",
+            "notifications"
         ]
     },
     "extra": {
