@@ -105,16 +105,10 @@ $logger = new MockLogger();
 $logger->sendData($data);
 ```
 
-#### Monitor server health
-MockLogger SDK lets you set limits on how much your server uses CPU, memory, and hard disk space. If any of these limits are crossed, it sends a detailed log to configured email.
+#### Server Health Monitoring
+MockLogger SDK empowers you to maintain optimal server performance by allowing you to set usage limits on CPU, memory, and hard disk space. If any of these limits are exceeded, the SDK automatically generates a detailed log.
 
-To start monitoring your server, run this command:
-
-```bash
-php artisan mocklogger:monitor
-```
-
-For continuous monitoring, you can schedule this command with a cron job. If something goes wrong, you'll receive an email notification by setting up your admin email in `config/mocklogger.php`.
+If the limits are exceeded, an email notification will be sent to administrator's email configured in `config/mocklogger.php`.
 
 ```php
 return [
@@ -123,4 +117,11 @@ return [
 ]
 ```
 
+To start monitoring your server, run this command:
+
+```bash
+php artisan mocklogger:monitor
+```
+
+For continuous monitoring, you can schedule this command with a cron job. 
 Keep your server in check effortlessly with this tool.
