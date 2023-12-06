@@ -14,4 +14,5 @@ return [
     // The API token required for authentication with the Mock Logger service.
     'app_api_token' => env('MOCKLOGGER_APP_API_TOKEN'),
     'web_server' => 'nginx',
+    'admin_email' => null,
 ];
