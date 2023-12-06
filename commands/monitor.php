@@ -54,9 +54,9 @@ class Monitor extends Command
     {
         $thresholds = config('mocklogger.monitor.thresholds');
 
-        $thresholds['cpu_usage'] = 95;
-        $thresholds['memory_usage'] = 95;
-        $thresholds['hard_disk_space'] = 95;
+        $monitorValues['cpu_usage'] = 95;
+        $monitorValues['memory_usage'] = 95;
+        $monitorValues['hard_disk_space'] = 95;
 
         return (
             $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
