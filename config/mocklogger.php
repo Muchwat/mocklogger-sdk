@@ -25,13 +25,13 @@ return [
         // Configure thresholds for resources.
         'thresholds' => [
             // Set the CPU usage threshold (percentage).
-            'cpu' => env('MOCKLOGGER_CPU_THRESHOLD', 90),
+            'cpu_usage' => env('MOCKLOGGER_CPU_THRESHOLD', 90),
 
             // Set the memory usage threshold (percentage). 
-            'memory' => env('MOCKLOGGER_MEMORY_THRESHOLD', 80),
+            'memory_usage' => env('MOCKLOGGER_MEMORY_THRESHOLD', 80),
 
             // Set the hard disk drive usage threshold (percentage).
-            'hard_disk' => env('MOCKLOGGER_HDD_THRESHOLD', 80),
+            'hard_disk_space' => env('MOCKLOGGER_HDD_THRESHOLD', 80),
         ],
     ],
 ];

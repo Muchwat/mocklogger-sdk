@@ -19,7 +19,7 @@ class WebServerMonitor
         if (PHP_OS !== 'Linux') { return null; }
         
         // Get the configured web server name
-        $webServerName = config('mocklogger.web_server');
+        $webServerName = config('mocklogger.monitor.web_server');
 
         // Check the status of the web server
         return self::checkStatus($webServerName);

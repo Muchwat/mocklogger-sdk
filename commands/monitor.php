@@ -54,15 +54,15 @@ class Monitor extends Command
     protected function exceedsThreshold(array $monitorValues): bool
     {
         $thresholds = config('mocklogger.monitor.thresholds');
-        
-        $thresholds['cpu'] = 20;
-        $thresholds['memory'] = 20;
-        $thresholds['hard_disk'] = 20;
+
+        $thresholds['cpu_usage'] = 20;
+        $thresholds['memory_usage'] = 20;
+        $thresholds['hard_disk_space'] = 20;
 
         return (
-            $monitorValues['cpu'] > $thresholds['cpu'] ||
-            $monitorValues['memory'] > $thresholds['memory'] ||
-            $monitorValues['hard_disk'] > $thresholds['hard_disk']
+            $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
+            $monitorValues['memory_usage'] > $thresholds['memory_usage'] ||
+            $monitorValues['hard_disk_space'] > $thresholds['hard_disk_space']
         );
     }
 
@@ -77,13 +77,13 @@ class Monitor extends Command
         $adminEmail = config('mocklogger.monitor.admin_email');
 
         if (!is_null($adminEmail)) {
-            $subject = "{$appName} - Server Resource Threshold Exceeded";
-            
+            $subject = "$appName - Server Resource Threshold Exceeded";
+
             // Customize the subject or email content as needed
-            $message = "Server resources have exceeded predefined thresholds:\n" .
-                       "CPU: {$monitorValues['cpu']}%\n" .
-                       "Memory: {$monitorValues['memory']}%\n" .
-                       "Hard Disk: {$monitorValues['hard_disk']}%";
+            $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .
+                       "CPU: {$monitorValues['cpu_usage']}%\n" .
+                       "Memory: {$monitorValues['memory_usage']}%\n" .
+                       "Hard Disk: {$monitorValues['hard_disk_space']}%";
             
             // Use Laravel's built-in mail functionality to send the email
             Mail::to($adminEmail)->send(new NotificationMail($subject, $message));
