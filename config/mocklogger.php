@@ -18,15 +18,15 @@ return [
         // Specify the web server used by your application, e.g., 'nginx' or 'apache2'.
         'web_server' => 'nginx', 
 
+        // Set email configuarations, default is 4 emails per 30mins interval.
         'email' => [
             // Set the email address of the administrator. 
             // Leave as null if notifications are not required.
             'admin' => null,
-
-            // Set time interval to get emails (minutes)
+            // Set time interval to get emails (minutes), default is 30 minutes
             'interval' => 30,
 
-            // Set number of emails to be sent in a set time interval.
+            // Set number of emails to be sent in an interval, default is 4 emails.
             'count'  => 4,
         ],
 

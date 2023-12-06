@@ -111,7 +111,36 @@ MockLogger SDK empowers you to maintain optimal server performance by allowing y
 ```php
 return [
     ...
-    'admin_email' => 'kevinmuchwat@gmail.com',
+    // Configure server health monitor.
+    'monitor' => [
+        // Specify the web server used by your application, e.g., 'nginx' or 'apache2'.
+        'web_server' => 'nginx', 
+
+        // Set email configuarations, default is 4 emails per 30mins interval.
+        'email' => [
+            // Set the email address of the administrator. 
+            // Leave as null if notifications are not required.
+            'admin' => 'kevinmuchwat@gmail.com',
+
+            // Set time interval to get emails (minutes), default is 30 minutes
+            'interval' => 30,
+
+            // Set number of emails to be sent in an interval, default is 4 emails.
+            'count'  => 4,
+        ],
+
+        // Configure thresholds for resources.
+        'thresholds' => [
+            // Set the CPU usage threshold (percentage).
+            'cpu_usage' => env('MOCKLOGGER_CPU_THRESHOLD', 90),
+
+            // Set the memory usage threshold (percentage). 
+            'memory_usage' => env('MOCKLOGGER_MEMORY_THRESHOLD', 80),
+
+            // Set the hard disk drive usage threshold (percentage).
+            'hard_disk_space' => env('MOCKLOGGER_HDD_THRESHOLD', 80),
+        ],
+    ],
 ]
 ```
 
