@@ -18,9 +18,17 @@ return [
         // Specify the web server used by your application, e.g., 'nginx' or 'apache2'.
         'web_server' => 'nginx', 
 
-        // Set the email address of the administrator. 
-        // Leave as null if notifications are not required.
-        'admin_email' => null, 
+        'email' => [
+            // Set the email address of the administrator. 
+            // Leave as null if notifications are not required.
+            'admin' => null,
+
+            // Set time interval to get emails (minutes)
+            'interval' => 30,
+
+            // Set number of emails to be sent in a set time interval.
+            'count'  => 4,
+        ],
 
         // Configure thresholds for resources.
         'thresholds' => [

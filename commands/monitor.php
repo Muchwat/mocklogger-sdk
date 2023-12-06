@@ -1,11 +1,12 @@
 <?php
-
 namespace Moktech\MockLoggerSDK\Commands;
 
 use Illuminate\Console\Command;
 use Moktech\MockLoggerSDK\MockLogger;
 use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class Monitor extends Command
 {
@@ -15,48 +16,29 @@ class Monitor extends Command
     public function handle()
     {
         try {
-            // Instantiate MockLogger
             $mockLogger = app(MockLogger::class);
 
-            // Prepare monitor values to be sent
             $monitorValues = MonitorManagerService::getValues();
 
-            // Check if any threshold is exceeded
             if ($this->exceedsThreshold($monitorValues)) {
-                // Send email with appropriate subject
                 $this->sendNotificationEmail($monitorValues);
+            } else {
+                $this->resetCache();
             }
 
-            // Send data using MockLogger
-            $response = $mockLogger->sendLogData([
-                'monitor_values' => $monitorValues,
-            ]);
+            $response = $mockLogger->sendLogData(['monitor_values' => $monitorValues]);
 
-            // Optionally, you can output the response details if needed
-            $this->line('Response Status Code: ' . $response->status());
-            $this->line('Response Body: ' . $response->body());
+            $this->outputResponseDetails($response);
 
-            // Display success message
             $this->info('Data sent successfully.');
         } catch (\Exception $e) {
-            // Handle exceptions if any
             $this->error('Error: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Check if any threshold is exceeded.
-     *
-     * @param array $monitorValues
-     * @return bool
-     */
     protected function exceedsThreshold(array $monitorValues): bool
     {
-        $thresholds = config('mocklogger.monitor.thresholds');
-
-        $monitorValues['cpu_usage'] = 95;
-        $monitorValues['memory_usage'] = 95;
-        $monitorValues['hard_disk_space'] = 95;
+        $thresholds = Config::get('mocklogger.monitor.thresholds');
 
         return (
             $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
@@ -65,29 +47,50 @@ class Monitor extends Command
         );
     }
 
-    /**
-     * Send email notification with appropriate subject.
-     *
-     * @param array $monitorValues
-     */
     protected function sendNotificationEmail(array $monitorValues)
-    {   
-        $appName = config('app.name');
-        $adminEmail = config('mocklogger.monitor.admin_email');
+    {
+        $adminEmail = Config::get('mocklogger.monitor.email.admin');
 
         if (!is_null($adminEmail)) {
+            $appName = config('app.name');
+            $emailCount = Config::get('mocklogger.monitor.email.count');
+            $emailInterval = Config::get('mocklogger.monitor.email.interval');
+
             $subject = "$appName - Server Resource Threshold Exceeded";
 
-            // Customize the subject or email content as needed
             $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .
-                       "CPU: {$monitorValues['cpu_usage']}%\n" .
-                       "Memory: {$monitorValues['memory_usage']}%\n" .
-                       "Hard Disk: {$monitorValues['hard_disk_space']}%";
-            
-            // Use Laravel's built-in mail functionality to send the email
-            Mail::raw($message, function ($message) use ($adminEmail, $subject) {
-                $message->to($adminEmail)->subject($subject);
-            });
+                "CPU: {$monitorValues['cpu_usage']}%\n" .
+                "Memory: {$monitorValues['memory_usage']}%\n" .
+                "Hard Disk: {$monitorValues['hard_disk_space']}%";
+
+            $this->sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval);
         }
+    }
+
+    protected function sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval)
+    {
+        if (Cache::get('mocklogger.monitor.email.interval', false)) {
+            $currentEmailCount = Cache::increment('email_count');
+
+            if ($currentEmailCount <= $emailCount) {
+                Mail::raw($message, function ($message) use ($adminEmail, $subject) {
+                    $message->to($adminEmail)->subject($subject);
+                });
+            }
+        } else {
+            $this->resetCache($emailInterval);
+        }
+    }
+
+    protected function resetCache($emailInterval = null)
+    {
+        Cache::forget('email_count');
+        Cache::put('mocklogger.monitor.email.interval', true, now()->addMinutes($emailInterval));
+    }
+
+    protected function outputResponseDetails($response)
+    {
+        $this->line('Response Status Code: ' . $response->status());
+        $this->line('Response Body: ' . $response->body());
     }
 }
