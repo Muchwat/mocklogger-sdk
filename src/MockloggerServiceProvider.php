@@ -14,10 +14,6 @@ class MockloggerServiceProvider extends ServiceProvider
             __DIR__.'/../config/mocklogger.php' => config_path('mocklogger.php'),
         ], 'mocklogger-config');
 
-        $this->app->bind(NotificationMail::class, function ($app) {
-            return $app->make(NotificationMail::class);
-        });
-
         $this->commands([Monitor::class]);
     }
 

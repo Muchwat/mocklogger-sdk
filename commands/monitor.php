@@ -5,7 +5,6 @@ namespace Moktech\MockLoggerSDK\Commands;
 use Illuminate\Console\Command;
 use Moktech\MockLoggerSDK\MockLogger;
 use Moktech\MockLoggerSDK\Services\MonitorManagerService;
-use Moktech\MockLoggerSDK\Notifications\NotificationMail;
 use Illuminate\Support\Facades\Mail;
 
 class Monitor extends Command
@@ -86,8 +85,9 @@ class Monitor extends Command
                        "Hard Disk: {$monitorValues['hard_disk_space']}%";
             
             // Use Laravel's built-in mail functionality to send the email
-            $mail = app(NotificationMail::class);
-            $mail->subject($subject)->message($message)->to($adminEmail)->send();
+            Mail::raw($message, function ($message) use ($adminEmail, $subject) {
+                $message->to($adminEmail)->subject($subject);
+            });
         }
     }
 }
