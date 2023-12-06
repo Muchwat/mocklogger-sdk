@@ -106,9 +106,7 @@ $logger->sendData($data);
 ```
 
 #### Server Health Monitoring
-MockLogger SDK empowers you to maintain optimal server performance by allowing you to set usage limits on CPU, memory, and hard disk space. If any of these limits are exceeded, the SDK automatically generates a detailed log.
-
-If the limits are exceeded, an email notification will be sent to administrator's email configured in `config/mocklogger.php`.
+MockLogger SDK empowers you to maintain optimal server performance by allowing you to set usage limits on CPU, memory, and hard disk space. If any of these limits are exceeded, the SDK automatically generates a detailed log and sends to administrator's email configured in `config/mocklogger.php`.
 
 ```php
 return [
