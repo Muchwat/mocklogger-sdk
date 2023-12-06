@@ -31,17 +31,17 @@ class WebServerMonitor
      * @param string $server The name of the web server.
      * @return string The status of the web server.
      */
-    protected static function checkStatus(string $server): string
+    protected static function checkStatus(string $server): ?string
     {
         // Command to check the status of the web server using systemctl
         $command = "systemctl is-active $server.service";
 
         try {
             // Execute the command and trim the output
-            return trim(shell_exec($command)) ?? 'Error: Unable to retrieve status';
+            return trim(shell_exec($command)) ?? null;
         } catch (\Exception $e) {
             // Log or handle the exception as needed
-            return 'Error: Unable to execute command';
+            return null;
         }
     }
 }

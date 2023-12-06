@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     // The base URL for the Mock Logger service.
     'host_url' => env('MOCKLOGGER_HOST_URL'),
@@ -13,6 +12,26 @@ return [
 
     // The API token required for authentication with the Mock Logger service.
     'app_api_token' => env('MOCKLOGGER_APP_API_TOKEN'),
-    'web_server' => 'nginx',
-    'admin_email' => null,
+    
+    // Configure server health monitor.
+    'monitor' => [
+        // Specify the web server used by your application, e.g., 'nginx' or 'apache2'.
+        'web_server' => 'nginx', 
+
+        // Set the email address of the administrator. 
+        // Leave as null if notifications are not required.
+        'admin_email' => null, 
+
+        // Configure thresholds for resources.
+        'thresholds' => [
+            // Set the CPU usage threshold (percentage).
+            'cpu' => env('MOCKLOGGER_CPU_THRESHOLD', 90),
+
+            // Set the memory usage threshold (percentage). 
+            'memory' => env('MOCKLOGGER_MEMORY_THRESHOLD', 80),
+
+            // Set the hard disk drive usage threshold (percentage).
+            'hard_disk' => env('MOCKLOGGER_HDD_THRESHOLD', 80),
+        ],
+    ],
 ];
