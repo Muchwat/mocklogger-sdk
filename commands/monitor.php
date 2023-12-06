@@ -55,9 +55,9 @@ class Monitor extends Command
     {
         $thresholds = config('mocklogger.monitor.thresholds');
 
-        $thresholds['cpu_usage'] = 20;
-        $thresholds['memory_usage'] = 20;
-        $thresholds['hard_disk_space'] = 20;
+        $thresholds['cpu_usage'] = 95;
+        $thresholds['memory_usage'] = 95;
+        $thresholds['hard_disk_space'] = 95;
 
         return (
             $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
@@ -86,7 +86,8 @@ class Monitor extends Command
                        "Hard Disk: {$monitorValues['hard_disk_space']}%";
             
             // Use Laravel's built-in mail functionality to send the email
-            Mail::to($adminEmail)->send(new NotificationMail($subject, $message));
+            $mail = app(NotificationMail::class);
+            $mail->subject($subject)->message($message)->to($adminEmail)->send();
         }
     }
 }
