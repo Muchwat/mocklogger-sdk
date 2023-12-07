@@ -89,6 +89,11 @@ class Monitor extends Command
     protected function resetCache($emailInterval = null)
     {
         Cache::forget('email_count');
+        
+        if(is_null($emailInterval)) {
+            return Cache::forget('mocklogger.monitor.email.interval');
+        }
+
         Cache::put('mocklogger.monitor.email.interval', true, now()->addMinutes($emailInterval));
     }
 
