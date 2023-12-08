@@ -40,5 +40,13 @@
                 "Moktech\\MockLoggerSDK\\MockloggerServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php artisan vendor:publish --provider='Moktech\\MockLoggerSDK\\MockloggerServiceProvider'"
+        ],
+        "pre-uninstall-cmd": [
+            "php artisan route:clear"
+        ]
     }
 }

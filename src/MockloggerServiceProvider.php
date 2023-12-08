@@ -4,7 +4,7 @@ namespace Moktech\MockLoggerSDK;
 
 use Illuminate\Support\ServiceProvider;
 use Moktech\MockLoggerSDK\Commands\Monitor;
-use Moktech\MockLoggerSDK\Notifications\NotificationMail;
+use Illuminate\Support\Facades\Route;
 
 class MockloggerServiceProvider extends ServiceProvider
 {   
@@ -21,6 +21,13 @@ class MockloggerServiceProvider extends ServiceProvider
     {
         $this->app->singleton(MockLogger::class, function () {
             return new MockLogger();
+        });
+    }
+
+    public function registerRoute()
+    {
+        Route::get('/mocklogger/action/recovery', function () {
+            var_dump('recovery on track');
         });
     }
 }
