@@ -241,7 +241,7 @@ class Monitor extends Command
         $emailCount = Config::get('mocklogger.monitor.email.count');
         $emailInterval = Config::get('mocklogger.monitor.email.interval');
 
-        if (!$this->isEmailThrottled($emailCount)) {
+        if ($this->isEmailThrottled($emailCount)) {
             Cache::increment('email_count');
             return true;
         }
