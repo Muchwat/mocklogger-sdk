@@ -138,7 +138,7 @@ class Monitor extends Command
      */
     private function hddExceeded(array $monitorValues, array $thresholds): bool
     {
-        return $this->calculateHddPercentage($monitorValues) > $thresholds['hard_disk_space'];
+        return $this->calculateHddPercentage($monitorValues['hard_disk_space']) > $thresholds['hard_disk_space'];
     }
 
     /**
