@@ -94,7 +94,7 @@ class Monitor extends Command
      *
      * @param  array  $monitorValues
      * @param  string $appName
-     * @return array
+     * @return \Illuminate\Http\Client\Response
      */
     protected function sendMockLoggerData(array $monitorValues, string $appName): Response
     {
