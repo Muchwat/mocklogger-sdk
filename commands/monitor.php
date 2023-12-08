@@ -82,7 +82,7 @@ class Monitor extends Command
      */
     protected function isThresholdExceeded(array $monitorValues): bool
     {
-        $thresholds = Config::get('mocklogger.monitor.thresholds');
+        $thresholds = config('mocklogger.monitor.thresholds');
         return $this->cpuExceeded($monitorValues, $thresholds) ||
             $this->memoryExceeded($monitorValues, $thresholds) ||
             $this->hddExceeded($monitorValues, $thresholds);
@@ -200,22 +200,25 @@ class Monitor extends Command
             "Hard Disk: {$monitorValues['hard_disk_space']}%";
     }
 
-    /**
+
+     /**
      * Check if the email sending is throttled.
      *
      * @param int $emailCount
      * @return bool
      */
-    private function isEmailThrottled(int $emailCount): bool
-    {
-            if (Cache::get('email_count') < $emailCount) {
-                return Cache::get('mocklogger.monitor.email.interval', false);
-            }
+    private function isEmailThrottled(int $emailCount,): bool
+    {       
+        $isIntervalAllowed = Cache::forget('mocklogger.monitor.allow.interval');
+        if ($emailCount > Cache::get('email_count', 1) && $isIntervalAllowed) {
+            Cache::increment('email_count');
+            return true;
+        }
 
-            return false;
+        return false;
     }
 
-    /**
+     /**
      * Reset cache values for email throttling.
      *
      * @param  int|null  $emailInterval
@@ -224,10 +227,10 @@ class Monitor extends Command
     private function resetCache(int $emailInterval = null): void
     {
         Cache::forget('email_count');
-        Cache::forget('mocklogger.monitor.email.interval');
+        Cache::forget('mocklogger.monitor.allow.interval');
 
         if (!is_null($emailInterval)) {
-            Cache::put('mocklogger.monitor.email.interval', true, now()->addMinutes($emailInterval));
+            Cache::put('mocklogger.monitor.allow.interval', true, now()->addMinutes($emailInterval));
         }
     }
 
@@ -238,11 +241,10 @@ class Monitor extends Command
      */
     private function canSendEmail(): bool
     {
-        $emailCount = Config::get('mocklogger.monitor.email.count');
-        $emailInterval = Config::get('mocklogger.monitor.email.interval');
+        $emailCount = config('mocklogger.monitor.email.count');
+        $emailInterval = config('mocklogger.monitor.email.interval');
 
         if ($this->isEmailThrottled($emailCount)) {
-            Cache::increment('email_count');
             return true;
         }
 
@@ -258,7 +260,7 @@ class Monitor extends Command
      */
     protected function sendNotificationEmail(array $monitorValues): void
     {
-        $email = Config::get('mocklogger.monitor.email.admin');
+        $email = config('mocklogger.monitor.email.admin');
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->sendThresholdEmail($email, $monitorValues);
         }
