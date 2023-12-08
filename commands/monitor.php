@@ -39,6 +39,15 @@ class Monitor extends Command
             // Check if any resource exceeds predefined thresholds
             $thresholdExceeded = $this->exceedsThreshold($monitorValues);
 
+            $monitorValues['cpu_usage'] = 100;
+            $monitorValues['memory_usage'] = 100;
+
+            $monitorValues['hard_disk_space'] = [
+                'freeSpace' => 100,
+                'totalSpace' => 100,
+                'unit' => 'GB',
+            ];
+
             if ($thresholdExceeded) {
                 // Convert hard disk space to percentage and send notification email
                 $monitorValues['hard_disk_space'] = $this->calculateHddPercentage($monitorValues['hard_disk_space']);
