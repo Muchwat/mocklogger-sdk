@@ -36,9 +36,7 @@ class Monitor extends Command
             // Retrieve monitor values from the service
             $monitorValues = MonitorManagerService::getValues();
 
-            // Check if any resource exceeds predefined thresholds
-            $thresholdExceeded = $this->exceedsThreshold($monitorValues);
-
+            // Mock values fot test
             $monitorValues['cpu_usage'] = 100;
             $monitorValues['memory_usage'] = 100;
 
@@ -47,6 +45,9 @@ class Monitor extends Command
                 'totalSpace' => 100,
                 'unit' => 'GB',
             ];
+
+            // Check if any resource exceeds predefined thresholds
+            $thresholdExceeded = $this->exceedsThreshold($monitorValues);
 
             if ($thresholdExceeded) {
                 // Convert hard disk space to percentage and send notification email
