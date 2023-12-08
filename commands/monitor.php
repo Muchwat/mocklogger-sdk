@@ -1,4 +1,5 @@
 <?php
+
 namespace Moktech\MockLoggerSDK\Commands;
 
 use Illuminate\Console\Command;
@@ -39,15 +40,18 @@ class Monitor extends Command
     protected function exceedsThreshold(array $monitorValues): bool
     {
         $thresholds = Config::get('mocklogger.monitor.thresholds');
-        
+
         $monitorValues['cpu_usage'] = 100;
         $monitorValues['memory_usage'] = 100;
         $monitorValues['hard_disk_space'] = 100;
 
+        $hddSpace = $monitorValues['hard_disk_space'];
+        $hardDiskSpace = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
+
         return (
-            $monitorValues['cpu_usage'] > $thresholds['cpu_usage'] ||
-            $monitorValues['memory_usage'] > $thresholds['memory_usage'] ||
-            $monitorValues['hard_disk_space'] > $thresholds['hard_disk_space']
+            ($monitorValues['cpu_usage'] ?? 0) > $thresholds['cpu_usage'] ||
+            ($monitorValues['memory_usage'] ?? 0) > $thresholds['memory_usage'] ||
+            ($hardDiskSpace ?? 0) > $thresholds['hard_disk_space']
         );
     }
 
@@ -89,8 +93,8 @@ class Monitor extends Command
     protected function resetCache($emailInterval = null)
     {
         Cache::forget('email_count');
-        
-        if(is_null($emailInterval)) {
+
+        if (is_null($emailInterval)) {
             return Cache::forget('mocklogger.monitor.email.interval');
         }
 

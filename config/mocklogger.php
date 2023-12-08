@@ -22,7 +22,8 @@ return [
         'email' => [
             // Set the email address of the administrator. 
             // Leave as null if notifications are not required.
-            'admin' => null,
+            'admin' => null, // e.g., kevinmuchwat@gmail.com
+
             // Set time interval to get emails (minutes), default is 30 minutes
             'interval' => 30,
 
