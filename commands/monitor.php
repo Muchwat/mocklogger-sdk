@@ -8,6 +8,7 @@ use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Http\Client\Response;
 
 class Monitor extends Command
 {
@@ -95,7 +96,7 @@ class Monitor extends Command
      * @param  string $appName
      * @return array
      */
-    protected function sendMockLoggerData(array $monitorValues, string $appName): array
+    protected function sendMockLoggerData(array $monitorValues, string $appName): Response
     {
         $mockLogger = app(MockLogger::class);
         return $mockLogger->sendLogData([
@@ -267,7 +268,7 @@ class Monitor extends Command
      * @param  mixed  $response
      * @return void
      */
-    private function outputResponseDetails($response): void
+    private function outputResponseDetails(Response $response): void
     {
         $this->line('Response Status Code: ' . $response->status());
         $this->line('Response Body: ' . $response->body());
