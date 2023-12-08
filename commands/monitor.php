@@ -43,7 +43,11 @@ class Monitor extends Command
 
         $monitorValues['cpu_usage'] = 100;
         $monitorValues['memory_usage'] = 100;
-        $monitorValues['hard_disk_space'] = 100;
+        $monitorValues['hard_disk_space'] = [
+            'freeSpace' => 100,
+            'totalSpace' => 100,
+            'unit' => 'GB',
+        ];
 
         $hddSpace = $monitorValues['hard_disk_space'];
         $hardDiskSpace = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
