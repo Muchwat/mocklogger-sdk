@@ -48,9 +48,8 @@ class Monitor extends Command
             ];
 
             // Check if any resource exceeds predefined thresholds
-            $thresholdExceeded = $this->exceedsThreshold($monitorValues);
 
-            if ($thresholdExceeded) {
+            if ($this->isThresholdExceeded($monitorValues)) {
                 // Convert hard disk space to percentage and send notification email
                 $monitorValues['hard_disk_space'] = $this->calculateHddPercentage($monitorValues['hard_disk_space']);
                 $this->sendNotificationEmail($monitorValues);
@@ -81,7 +80,7 @@ class Monitor extends Command
      * @param  array  $monitorValues
      * @return bool
      */
-    protected function exceedsThreshold(array $monitorValues): bool
+    protected function isThresholdExceeded(array $monitorValues): bool
     {
         $thresholds = Config::get('mocklogger.monitor.thresholds');
         return $this->cpuExceeded($monitorValues, $thresholds) ||
@@ -125,7 +124,7 @@ class Monitor extends Command
      */
     private function cpuExceeded(array $monitorValues, array $thresholds): bool
     {
-        return ($monitorValues['cpu_usage'] ?? 0) > $thresholds['cpu_usage'];
+        return ($monitorValues['cpu_usage'] ?? 0) >= $thresholds['cpu_usage'];
     }
 
     /**
@@ -137,7 +136,7 @@ class Monitor extends Command
      */
     private function memoryExceeded(array $monitorValues, array $thresholds): bool
     {
-        return ($monitorValues['memory_usage'] ?? 0) > $thresholds['memory_usage'];
+        return ($monitorValues['memory_usage'] ?? 0) >= $thresholds['memory_usage'];
     }
 
     /**
@@ -149,7 +148,7 @@ class Monitor extends Command
      */
     private function hddExceeded(array $monitorValues, array $thresholds): bool
     {
-        return $this->calculateHddPercentage($monitorValues['hard_disk_space']) > $thresholds['hard_disk_space'];
+        return $this->calculateHddPercentage($monitorValues['hard_disk_space']) >= $thresholds['hard_disk_space'];
     }
 
     /**
@@ -209,8 +208,11 @@ class Monitor extends Command
      */
     private function isEmailThrottled(int $emailCount): bool
     {
-        return Cache::get('mocklogger.monitor.email.interval') ||
-            Cache::get('email_count', 0) > $emailCount;
+            if (Cache::get('email_count') < $emailCount) {
+                return Cache::get('mocklogger.monitor.email.interval', false);
+            }
+
+            return false;
     }
 
     /**
@@ -236,8 +238,8 @@ class Monitor extends Command
      */
     private function canSendEmail(): bool
     {
-        $emailCount = Config::get('mocklogger.monitor.email.count', 0);
-        $emailInterval = Config::get('mocklogger.monitor.email.interval', 0);
+        $emailCount = Config::get('mocklogger.monitor.email.count');
+        $emailInterval = Config::get('mocklogger.monitor.email.interval');
 
         if (!$this->isEmailThrottled($emailCount)) {
             Cache::increment('email_count');
@@ -257,7 +259,7 @@ class Monitor extends Command
     protected function sendNotificationEmail(array $monitorValues): void
     {
         $email = Config::get('mocklogger.monitor.email.admin');
-        if (!is_null($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->sendThresholdEmail($email, $monitorValues);
         }
     }
