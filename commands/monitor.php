@@ -203,13 +203,12 @@ class Monitor extends Command
 
      /**
      * Check if the email sending is throttled.
-     *
-     * @param int $emailCount
      * @return bool
      */
-    private function isEmailThrottled(int $emailCount,): bool
-    {       
-        $isIntervalAllowed = Cache::forget('mocklogger.monitor.allow.interval');
+    private function isEmailThrottled(): bool
+    {      
+        $emailCount = config('mocklogger.monitor.email.count');
+        $isIntervalAllowed = Cache::get('mocklogger.monitor.allow.interval', false);
         if ($emailCount > Cache::get('email_count', 1) && $isIntervalAllowed) {
             Cache::increment('email_count');
             return true;
@@ -241,10 +240,10 @@ class Monitor extends Command
      */
     private function canSendEmail(): bool
     {
-        $emailCount = config('mocklogger.monitor.email.count');
+        
         $emailInterval = config('mocklogger.monitor.email.interval');
 
-        if ($this->isEmailThrottled($emailCount)) {
+        if ($this->isEmailThrottled()) {
             return true;
         }
 
