@@ -30,8 +30,8 @@ class Monitor extends Command
             ];
 
             if ($this->exceedsThreshold($monitorValues)) {
-                $hddSpace = $monitorValues['hard_disk_space'];
-                $monitorValues['hard_disk_space'] = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
+                // $hddSpace = $monitorValues['hard_disk_space'];
+                // $monitorValues['hard_disk_space'] = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
 
                 $this->sendNotificationEmail($monitorValues);
             } else {
