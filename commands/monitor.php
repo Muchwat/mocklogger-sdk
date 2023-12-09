@@ -66,7 +66,7 @@ class Monitor extends Command
         if (!is_null($adminEmail)) {
             $appName = config('app.name');
             $emailCount = Config::get('mocklogger.monitor.email.count');
-            $emailInterval = Config::get('throttle.interval');
+            $emailInterval = Config::get('mocklogger.email.throttle');
 
             $subject = "$appName - Server Resource Threshold Exceeded";
 
@@ -81,10 +81,10 @@ class Monitor extends Command
 
     protected function sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval)
     {
-        if (Cache::get('throttle.interval', false)) {
-            $currentEmailCount = Cache::increment('email_count');
+        if (Cache::get('mocklogger.email.throttle', false)) {
+            $count = Cache::increment('mocklogger.sent.email.count');
 
-            if ($currentEmailCount <= $emailCount) {
+            if ($count <= $emailCount) {
                 Mail::raw($message, function ($message) use ($adminEmail, $subject) {
                     $message->to($adminEmail)->subject($subject);
                 });
@@ -96,18 +96,18 @@ class Monitor extends Command
 
     protected function resetCache($emailInterval = null)
     {
-        Cache::forget('email_count');
+        Cache::forget('mocklogger.sent.email.count');
 
         if (is_null($emailInterval)) {
-            return Cache::forget('throttle.interval');
+            return Cache::forget('mocklogger.email.throttle');
         }
 
-        Cache::put('throttle.interval', true, now()->addMinutes($emailInterval));
+        Cache::put('mocklogger.email.throttle', true, now()->addMinutes($emailInterval));
     }
 
     protected function hddPercentage(array $monitorValues): float
     {
-        $hddSpace = $monitorValues['hard_disk_space'] ?? [];
+        $hddSpace = $monitorValues['hard_disk_space'];
         return ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
     }
 
