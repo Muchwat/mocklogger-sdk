@@ -208,8 +208,10 @@ class Monitor extends Command
     private function isEmailThrottled(): bool
     {      
         $emailCount = config('mocklogger.monitor.email.count');
+        $currentEmailCount = Cache::increment('email_count');
         $isIntervalAllowed = Cache::get('mocklogger.monitor.allow.interval', false);
-        if ($emailCount > Cache::get('email_count', 1) && $isIntervalAllowed) {
+        
+        if ($currentEmailCount <= $emailCount && $isIntervalAllowed) {
             Cache::increment('email_count');
             return true;
         }
