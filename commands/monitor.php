@@ -90,27 +90,39 @@ class Monitor extends Command
             $emailCount = Config::get('mocklogger.monitor.email.count');
             $emailInterval = Config::get('mocklogger.monitor.email.interval');
 
-            $subject = "$appName - Server Resource Threshold Exceeded";
+            $canSendEmail = $this->canSendEmail($emailCount, $emailInterval);
 
-            $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .
-                "CPU: {$monitorValues['cpu_usage']}%\n" .
-                "Memory: {$monitorValues['memory_usage']}%\n" .
-                "Hard Disk: {$this->hddPercentage($monitorValues)}%";
+            if ($canSendEmail) {
+                $subject = "$appName - Server Resource Threshold Exceeded";
 
-            $this->sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval);
+                $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .
+                    "CPU: {$monitorValues['cpu_usage']}%\n" .
+                    "Memory: {$monitorValues['memory_usage']}%\n" .
+                    "Hard Disk: {$this->hddPercentage($monitorValues)}%";
+
+                Mail::raw($message, function ($message) use ($adminEmail, $subject) {
+                    $message->to($adminEmail)->subject($subject);
+                });
+            }
         }
     }
 
-    protected function sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval)
-    {   
+    protected function canSendEmail($emailCount, $emailInterval)
+    {
         $count = $this->cacheService->increment(CacheService::EMAIL_COUNT_KEY);
-        if (!$this->cacheService->get(CacheService::EMAIL_THROTTLE_KEY, false) && $count <= $emailCount) {
-            Mail::raw($message, function ($message) use ($adminEmail, $subject) {
-                $message->to($adminEmail)->subject($subject);
-            });
-        } else {
-            $this->cacheService->resetCache($emailInterval);
+
+        if ($this->isEmailSendingAllowed($count, $emailCount)) {
+            return true;
         }
+
+        $this->cacheService->resetCache($emailInterval);
+        return false;
+    }
+
+
+    protected function isEmailSendingAllowed($count, $emailCount)
+    {
+        return !$this->cacheService->get(CacheService::EMAIL_THROTTLE_KEY, false) && $count <= $emailCount;
     }
 
     protected function outputResponseDetails($response)
