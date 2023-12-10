@@ -62,10 +62,10 @@ class Monitor extends Command
     {
         $adminEmail = Config::get('mocklogger.monitor.email.admin');
 
-        if (!is_null($adminEmail)) {
+        if (filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             $appName = config('app.name');
-            $emailCount = Config::get('mocklogger.monitor.email.count');
-            $emailInterval = Config::get('mocklogger.email.throttle');
+            $emailCount = config('mocklogger.monitor.email.count');
+            $emailInterval = config('mocklogger.email.interval');
 
             $subject = "$appName - Server Resource Threshold Exceeded";
 
