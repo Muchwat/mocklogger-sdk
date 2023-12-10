@@ -21,6 +21,7 @@ class Monitor extends Command
 
             $monitorValues = MonitorManagerService::getValues();
 
+            // For testing purposes, you set all usage values to 100.
             $monitorValues['cpu_usage'] = 100;
             $monitorValues['memory_usage'] = 100;
             $monitorValues['hard_disk_space'] = [
@@ -30,9 +31,6 @@ class Monitor extends Command
             ];
 
             if ($this->exceedsThreshold($monitorValues)) {
-                // $hddSpace = $monitorValues['hard_disk_space'];
-                // $monitorValues['hard_disk_space'] = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
-
                 $this->sendNotificationEmail($monitorValues);
             } else {
                 $this->resetCache();
@@ -51,6 +49,7 @@ class Monitor extends Command
     protected function exceedsThreshold(array $monitorValues): bool
     {
         $thresholds = config('mocklogger.monitor.thresholds');
+
         return (
             ($monitorValues['cpu_usage'] ?? 0) > $thresholds['cpu_usage'] ||
             ($monitorValues['memory_usage'] ?? 0) > $thresholds['memory_usage'] ||
@@ -65,7 +64,7 @@ class Monitor extends Command
         if (filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
             $appName = config('app.name');
             $emailCount = config('mocklogger.monitor.email.count');
-            $emailInterval = config('mocklogger.email.interval');
+            $emailInterval = config('mocklogger.monitor.email.interval');
 
             $subject = "$appName - Server Resource Threshold Exceeded";
 
@@ -80,13 +79,15 @@ class Monitor extends Command
 
     protected function sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval)
     {
-        if (Cache::get('mocklogger.email.throttle', false)) {
+        if (!Cache::get('mocklogger.email.throttle', false)) {
             $count = Cache::increment('mocklogger.sent.email.count');
 
             if ($count <= $emailCount) {
                 Mail::raw($message, function ($message) use ($adminEmail, $subject) {
                     $message->to($adminEmail)->subject($subject);
                 });
+            } else {
+                $this->resetCache($emailInterval);
             }
         } else {
             $this->resetCache($emailInterval);
@@ -97,11 +98,9 @@ class Monitor extends Command
     {
         Cache::forget('mocklogger.sent.email.count');
 
-        if (is_null($emailInterval)) {
-            return Cache::forget('mocklogger.email.throttle');
+        if (!is_null($emailInterval)) {
+            Cache::put('mocklogger.email.throttle', true, now()->addMinutes($emailInterval));
         }
-
-        Cache::put('mocklogger.email.throttle', true, now()->addMinutes($emailInterval));
     }
 
     protected function hddPercentage(array $monitorValues): float
