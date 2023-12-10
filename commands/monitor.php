@@ -95,12 +95,10 @@ class Monitor extends Command
     }
 
     protected function resetCache($emailInterval = null)
-    {
+    {   
+        $ttl = now()->addMinutes($emailInterval);
         Cache::forget('mocklogger.sent.email.count');
-
-        if (!is_null($emailInterval)) {
-            Cache::put('mocklogger.email.throttle', true, now()->addMinutes($emailInterval));
-        }
+        Cache::put('mocklogger.email.throttle', !is_null($emailInterval), $ttl);
     }
 
     protected function hddPercentage(array $monitorValues): float
