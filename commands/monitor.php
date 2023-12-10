@@ -5,6 +5,7 @@ namespace Moktech\MockLoggerSDK\Commands;
 use Illuminate\Console\Command;
 use Moktech\MockLoggerSDK\MockLogger;
 use Moktech\MockLoggerSDK\Services\MonitorManagerService;
+use Moktech\MockLoggerSDK\Services\CacheService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
@@ -13,11 +14,13 @@ class Monitor extends Command
 {
     protected $signature = 'mocklogger:monitor';
     protected $description = 'Monitor resource usages in your app!';
+    protected $cacheService;
 
     public function handle()
     {
         try {
             $mockLogger = app(MockLogger::class);
+            $this->cacheService = new CacheService();
 
             $monitorValues = MonitorManagerService::getValues();
 
@@ -33,7 +36,7 @@ class Monitor extends Command
             if ($this->exceedsThreshold($monitorValues)) {
                 $this->sendNotificationEmail($monitorValues);
             } else {
-                $this->resetCache();
+                $this->cacheService->resetCache();
             }
 
             $response = $mockLogger->sendLogData(['monitor_values' => $monitorValues]);
@@ -48,13 +51,34 @@ class Monitor extends Command
 
     protected function exceedsThreshold(array $monitorValues): bool
     {
-        $thresholds = config('mocklogger.monitor.thresholds');
+        $thresholds = Config::get('mocklogger.monitor.thresholds');
 
         return (
-            ($monitorValues['cpu_usage'] ?? 0) > $thresholds['cpu_usage'] ||
-            ($monitorValues['memory_usage'] ?? 0) > $thresholds['memory_usage'] ||
-            ($this->hddPercentage($monitorValues) ?? 0) > $thresholds['hard_disk_space']
+            $this->cpuExceeded($monitorValues, $thresholds) ||
+            $this->memoryExceeded($monitorValues, $thresholds) ||
+            $this->hddExceeded($monitorValues, $thresholds)
         );
+    }
+
+    private function cpuExceeded(array $monitorValues, array $thresholds): bool
+    {
+        return ($monitorValues['cpu_usage'] ?? 0) > $thresholds['cpu_usage'];
+    }
+
+    private function memoryExceeded(array $monitorValues, array $thresholds): bool
+    {
+        return ($monitorValues['memory_usage'] ?? 0) > $thresholds['memory_usage'];
+    }
+
+    private function hddExceeded(array $monitorValues, array $thresholds): bool
+    {
+        return $this->hddPercentage($monitorValues) > $thresholds['hard_disk_space'];
+    }
+
+    protected function hddPercentage(array $monitorValues): float
+    {
+        $hddSpace = $monitorValues['hard_disk_space'];
+        return ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
     }
 
     protected function sendNotificationEmail(array $monitorValues)
@@ -62,9 +86,9 @@ class Monitor extends Command
         $adminEmail = Config::get('mocklogger.monitor.email.admin');
 
         if (filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-            $appName = config('app.name');
-            $emailCount = config('mocklogger.monitor.email.count');
-            $emailInterval = config('mocklogger.monitor.email.interval');
+            $appName = Config::get('app.name');
+            $emailCount = Config::get('mocklogger.monitor.email.count');
+            $emailInterval = Config::get('mocklogger.monitor.email.interval');
 
             $subject = "$appName - Server Resource Threshold Exceeded";
 
@@ -78,33 +102,15 @@ class Monitor extends Command
     }
 
     protected function sendEmailIfNeeded($adminEmail, $subject, $message, $emailCount, $emailInterval)
-    {
-        if (!Cache::get('mocklogger.email.throttle', false)) {
-            $count = Cache::increment('mocklogger.sent.email.count');
-
-            if ($count <= $emailCount) {
-                Mail::raw($message, function ($message) use ($adminEmail, $subject) {
-                    $message->to($adminEmail)->subject($subject);
-                });
-            } else {
-                $this->resetCache($emailInterval);
-            }
-        } else {
-            $this->resetCache($emailInterval);
-        }
-    }
-
-    protected function resetCache($emailInterval = null)
     {   
-        $ttl = now()->addMinutes($emailInterval);
-        Cache::forget('mocklogger.sent.email.count');
-        Cache::put('mocklogger.email.throttle', !is_null($emailInterval), $ttl);
-    }
-
-    protected function hddPercentage(array $monitorValues): float
-    {
-        $hddSpace = $monitorValues['hard_disk_space'];
-        return ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
+        $count = $this->cacheService->increment(CacheService::EMAIL_COUNT_KEY);
+        if (!$this->cacheService->get(CacheService::EMAIL_THROTTLE_KEY, false) && $count <= $emailCount) {
+            Mail::raw($message, function ($message) use ($adminEmail, $subject) {
+                $message->to($adminEmail)->subject($subject);
+            });
+        } else {
+            $this->cacheService->resetCache($emailInterval);
+        }
     }
 
     protected function outputResponseDetails($response)
