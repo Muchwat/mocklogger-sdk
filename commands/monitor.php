@@ -86,6 +86,7 @@ class Monitor extends Command
             $response = $mockLogger->sendLogData(['monitor' => $monitor]);
 
             $this->line('MockLogger Response Status Code: ' . $response->status());
+            $this->line('MockLogger Response Body: ' . $response->body());
         } catch (\Exception $e) {
             $this->error('Error: ' . $e->getMessage());
         }
