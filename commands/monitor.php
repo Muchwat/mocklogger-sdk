@@ -61,50 +61,34 @@ class Monitor extends Command
             $this->throttler = new Throttler($this->cacheService);
             
             // Get monitor values from MonitorManagerService
-            $monitorValues = MonitorManagerService::getValues();
+            $monitor = MonitorManagerService::getValues();
             
             // For testing purposes, set all usage values to 100.
-            $monitorValues['cpu_usage'] = 100;
-            $monitorValues['memory_usage'] = 100;
-            $monitorValues['hard_disk_space'] = [
+            $monitor['cpu_usage'] = 100;
+            $monitor['memory_usage'] = 100;
+            $monitor['hard_disk_space'] = [
                 'free_space' => 100,
                 'total_space' => 100,
                 'unit' => 'GB',
             ];
 
-            $this->thresholds = new Thresholds($monitorValues);
+            $this->thresholds = new Thresholds($monitor);
 
             // Check if resource usage exceeds thresholds
             if (!$this->thresholds->exceeded()) {
                 $this->cacheService->reset();
             }
 
+            $monitor['thresholds_exceeded'] = $this->thresholds->exceeded();
+            $monitor['can_send_email'] = $this->throttler->canSendEmail();
+
             // Send log data to MockLogger
-            $response = $mockLogger->sendLogData([
-                'monitor_values' => $monitorValues,
-                'thresholds_exceeded' => $this->thresholds->exceeded(),
-                'can_send_email' => $this->throttler->canSendEmail(),
-            ]);
+            $response = $mockLogger->sendLogData(['monitor' => $monitor]);
 
-            // Output response details
-            $this->outputResponseDetails($response);
-
-            $this->info('Data sent successfully.');
+            $this->line('MockLogger Response Status Code: ' . $response->status());
         } catch (\Exception $e) {
             $this->error('Error: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Output response details to the console.
-     *
-     * @param mixed $response
-     * @return void
-     */
-    protected function outputResponseDetails($response): void
-    {
-        // Output response details
-        $this->line('Response Status Code: ' . $response->status());
-        $this->line('Response Body: ' . $response->body());
-    }
 }

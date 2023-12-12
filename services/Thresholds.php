@@ -12,18 +12,11 @@ use Illuminate\Support\Facades\Config;
 class Thresholds
 {
 
-    /**
-     * Cache service instance.
-     *
-     * @var array
-     */
-    private $monitorValues;
-
-    /**
-     * ResourceThresholds constructor.
-     *
-     * @param array $monitorValues
-     */
+    /* MonitorManagerService::getValues().
+    *
+    * @var $monitor
+    */
+    private $monitor;
 
     /* CPU threshold configuration.
     *
@@ -43,9 +36,17 @@ class Thresholds
     */
     private $hardDiskThreshold;
 
-    public function __construct(array $monitorValues)
+
+
+    /**
+     * Thresholds constructor.
+     *
+     * @param MonitorManagerService::getValues()
+     */
+
+    public function __construct(array $monitor)
     {
-        $this->monitorValues = $monitorValues;
+        $this->monitor = $monitor;
         $this->cpuThreshold = Config::get('mocklogger.monitor.thresholds.cpu_usage');
         $this->memoryThreshold = Config::get('mocklogger.monitor.thresholds.memory_usage');
         $this->hardDiskThreshold = Config::get('mocklogger.monitor.thresholds.hard_disk_space');
@@ -55,31 +56,27 @@ class Thresholds
      * Check if CPU usage exceeds the threshold.
      * @return bool
      */
-    public function cpuExceeded(): bool
+    private function cpuExceeded(): bool
     {
         // Check if CPU usage exceeds threshold
-        return ($this->monitorValues['cpu_usage'] ?? 0) > $this->cpuThreshold;
+        return ($this->monitor['cpu_usage'] ?? 0) > $this->cpuThreshold;
     }
 
     /**
      * Check if memory usage exceeds the threshold.
-     *
-     * @param array $monitorValues
      * @return bool
      */
-    public function memoryExceeded(): bool
+    private function memoryExceeded(): bool
     {
         // Check if memory usage exceeds threshold
-        return ($this->monitorValues['memory_usage'] ?? 0) > $this->memoryThreshold;
+        return ($this->monitor['memory_usage'] ?? 0) > $this->memoryThreshold;
     }
 
     /**
      * Check if HDD usage exceeds the threshold.
-     *
-     * @param array $monitorValues
      * @return bool
      */
-    public function hddExceeded(): bool
+    private function hddExceeded(): bool
     {
         // Check if HDD usage exceeds threshold
         return $this->hddPercentage() > $this->hardDiskThreshold;
@@ -92,7 +89,7 @@ class Thresholds
     public function hddPercentage(): float
     {
         // Calculate HDD percentage
-        $hddSpace = $this->monitorValues['hard_disk_space'];
+        $hddSpace = $this->monitor['hard_disk_space'];
         $percentage = ($hddSpace['free_space'] / ($hddSpace['total_space'] ?? 0)) * 100;
 
         // Return the percentage rounded to 2 decimal places
