@@ -54,42 +54,37 @@ class Monitor extends Command
      */
     public function handle(): void
     {
-        try {
-            // Instantiate MockLogger, CacheService, Throttler and Thresholds
-            $mockLogger = app(MockLogger::class);
-            $this->cacheService = new CacheService();
-            $this->throttler = new Throttler($this->cacheService);
-            
-            // Get monitor values from MonitorManagerService
-            $monitor = MonitorManagerService::getValues();
-            
-            // For testing purposes, set all usage values to 100.
-            $monitor['cpu_usage'] = 100;
-            $monitor['memory_usage'] = 100;
-            $monitor['hard_disk_space'] = [
-                'free_space' => 100,
-                'total_space' => 100,
-                'unit' => 'GB',
-            ];
+        // Instantiate MockLogger, CacheService, Throttler and Thresholds
+        $mockLogger = app(MockLogger::class);
+        $this->cacheService = new CacheService();
+        $this->throttler = new Throttler($this->cacheService);
 
-            $this->thresholds = new Thresholds($monitor);
+        // Get monitor values from MonitorManagerService
+        $monitor = MonitorManagerService::getValues();
 
-            // Check if resource usage exceeds thresholds
-            if (!$this->thresholds->exceeded()) {
-                $this->cacheService->reset();
-            }
+        // For testing purposes, set all usage values to 100.
+        $monitor['cpu_usage'] = 100;
+        $monitor['memory_usage'] = 100;
+        $monitor['hard_disk_space'] = [
+            'free_space' => 100,
+            'total_space' => 100,
+            'unit' => 'GB',
+        ];
 
-            $monitor['thresholds_exceeded'] = $this->thresholds->exceeded();
-            $monitor['can_send_email'] = $this->throttler->canSendEmail();
+        $this->thresholds = new Thresholds($monitor);
 
-            // Send log data to MockLogger
-            $response = $mockLogger->sendLogData(['monitor' => $monitor]);
-
-            $this->line('MockLogger Response Status Code: ' . $response->status());
-            $this->line('MockLogger Response Body: ' . $response->body());
-        } catch (\Exception $e) {
-            $this->error('Error: ' . $e->getMessage());
+        // Check if resource usage exceeds thresholds
+        if (!$this->thresholds->exceeded()) {
+            $this->cacheService->reset();
         }
-    }
 
+        $monitor['thresholds_exceeded'] = $this->thresholds->exceeded();
+        $monitor['can_send_email'] = $this->throttler->canSendEmail();
+
+        // Send log data to MockLogger
+        $response = $mockLogger->sendLogData(['monitor' => $monitor]);
+
+        $this->line('MockLogger Response Status Code: ' . $response->status());
+        $this->line('MockLogger Response Body: ' . $response->body());
+    }
 }
