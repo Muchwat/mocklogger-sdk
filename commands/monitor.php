@@ -8,8 +8,6 @@ use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 use Moktech\MockLoggerSDK\Services\CacheService;
 use Moktech\MockLoggerSDK\Services\Throttler;
 use Moktech\MockLoggerSDK\Services\Thresholds;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
 
 class Monitor extends Command
 {
@@ -69,19 +67,16 @@ class Monitor extends Command
             $monitorValues['cpu_usage'] = 100;
             $monitorValues['memory_usage'] = 100;
             $monitorValues['hard_disk_space'] = [
-                'freeSpace' => 100,
-                'totalSpace' => 100,
+                'free_space' => 100,
+                'total_space' => 100,
                 'unit' => 'GB',
             ];
 
             $this->thresholds = new Thresholds($monitorValues);
 
-            // // Check if resource usage exceeds thresholds
-            
+            // Check if resource usage exceeds thresholds
             if (!$this->thresholds->exceeded()) {
                 $this->cacheService->reset();
-            } else {
-                $this->sendNotificationEmail($monitorValues);
             }
 
             // Send log data to MockLogger
@@ -99,32 +94,6 @@ class Monitor extends Command
             $this->error('Error: ' . $e->getMessage());
         }
     }
-
-    protected function sendNotificationEmail(array $monitorValues): void
-    {
-        $adminEmail = Config::get('mocklogger.monitor.email.admin');
-
-        // Validate admin email
-        if (filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-            $appName = Config::get('app.name');
-
-            // Check if email can be sent
-            if ($this->throttler->canSendEmail()) {
-                $subject = "$appName - Server Resource Threshold Exceeded";
-
-                $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .
-                    "CPU: {$monitorValues['cpu_usage']}%\n" .
-                    "Memory: {$monitorValues['memory_usage']}%\n" .
-                    "Hard Disk: {$this->thresholds->hddPercentage()}%";
-
-                // Send email
-                Mail::raw($message, function ($message) use ($adminEmail, $subject) {
-                    $message->to($adminEmail)->subject($subject);
-                });
-            }
-        }
-    }
-
 
     /**
      * Output response details to the console.

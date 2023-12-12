@@ -24,8 +24,8 @@ class HardDiskMonitor
 
         // Format the result and return
         return [
-            'freeSpace' => $freeSpace,
-            'totalSpace' => $totalSpace,
+            'free_space' => $freeSpace,
+            'total_space' => $totalSpace,
             'unit' => 'GB',
         ];
     }

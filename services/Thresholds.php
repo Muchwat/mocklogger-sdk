@@ -93,7 +93,7 @@ class Thresholds
     {
         // Calculate HDD percentage
         $hddSpace = $this->monitorValues['hard_disk_space'];
-        $percentage = ($hddSpace['freeSpace'] / ($hddSpace['totalSpace'] ?? 0)) * 100;
+        $percentage = ($hddSpace['free_space'] / ($hddSpace['total_space'] ?? 0)) * 100;
 
         // Return the percentage rounded to 2 decimal places
         return (float)number_format($percentage, 2);
