@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Moktech\MockLoggerSDK\MockLogger;
 use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 use Moktech\MockLoggerSDK\Services\CacheService;
-use Moktech\MockLoggerSDK\Services\EmailThrottler;
+use Moktech\MockLoggerSDK\Services\Throttler;
 use Moktech\MockLoggerSDK\Services\Thresholds;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Config;
@@ -35,11 +35,11 @@ class Monitor extends Command
     protected $cacheService;
 
     /**
-     * EmailThrottler service instance.
+     * Throttler service instance.
      *
-     * @var EmailThrottler
+     * @var Throttler
      */
-    protected $emailThrottler;
+    protected $throttler;
 
 
     /**
@@ -57,10 +57,10 @@ class Monitor extends Command
     public function handle(): void
     {
         try {
-            // Instantiate MockLogger, CacheService, EmailThrottler and Thresholds
+            // Instantiate MockLogger, CacheService, Throttler and Thresholds
             $mockLogger = app(MockLogger::class);
             $this->cacheService = new CacheService();
-            $this->emailThrottler = new EmailThrottler($this->cacheService);
+            $this->throttler = new Throttler($this->cacheService);
             
             // Get monitor values from MonitorManagerService
             $monitorValues = MonitorManagerService::getValues();
@@ -76,17 +76,20 @@ class Monitor extends Command
 
             $this->thresholds = new Thresholds($monitorValues);
 
-            // Check if resource usage exceeds thresholds
-            if ($this->thresholds->exceeds()) {
-                // Send notification email
-                $this->sendNotificationEmail($monitorValues);
+            // // Check if resource usage exceeds thresholds
+            
+            if (!$this->thresholds->exceeded()) {
+                $this->cacheService->reset();
             } else {
-                // Reset cache if thresholds not exceeded
-                $this->cacheService->resetCache();
+                $this->sendNotificationEmail($monitorValues);
             }
 
             // Send log data to MockLogger
-            $response = $mockLogger->sendLogData(['monitor_values' => $monitorValues]);
+            $response = $mockLogger->sendLogData([
+                'monitor_values' => $monitorValues,
+                'thresholds_exceeded' => $this->thresholds->exceeded(),
+                'can_send_email' => $this->throttler->canSendEmail(),
+            ]);
 
             // Output response details
             $this->outputResponseDetails($response);
@@ -106,7 +109,7 @@ class Monitor extends Command
             $appName = Config::get('app.name');
 
             // Check if email can be sent
-            if ($this->emailThrottler->canSendEmail()) {
+            if ($this->throttler->canSendEmail()) {
                 $subject = "$appName - Server Resource Threshold Exceeded";
 
                 $message = "Server ($appName) resources have exceeded predefined thresholds:\n" .

@@ -1,12 +1,13 @@
 <?php
 
 namespace Moktech\MockLoggerSDK\Services;
+
 use Illuminate\Support\Facades\Config;
 
 /**
- * Class EmailThrottler
+ * Class Throttler
  */
-class EmailThrottler
+class Throttler
 {
     /**
      * Cache service instance.
@@ -21,11 +22,11 @@ class EmailThrottler
     */
     private $emailCount;
 
-   /* Throttle interval in minites.
-   *
-   * @var $emailInterval
-   */
-  private $emailInterval;
+    /* Throttle interval in minites.
+    *
+    * @var $emailInterval
+    */
+    private $emailInterval;
 
     /**
      * EmailThrottler constructor.
@@ -33,7 +34,7 @@ class EmailThrottler
      * @param CacheService $cacheService
      */
     public function __construct(CacheService $cacheService)
-    {   
+    {
         $this->emailCount = Config::get('mocklogger.monitor.email.count');
         $this->emailInterval = Config::get('mocklogger.monitor.email.interval');
         $this->cacheService = $cacheService;
@@ -44,14 +45,14 @@ class EmailThrottler
      * @return bool
      */
     public function canSendEmail(): bool
-    {    
+    {
         // Check if email sending is allowed
         if ($this->isEmailSendingAllowed()) {
             return true;
         }
 
         // Reset cache and prevent email sending
-        $this->cacheService->resetCache($this->emailInterval);
+        $this->cacheService->reset($this->emailInterval);
         return false;
     }
 
