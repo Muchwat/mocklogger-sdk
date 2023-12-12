@@ -64,6 +64,15 @@ class Monitor extends Command
             
             // Get monitor values from MonitorManagerService
             $monitorValues = MonitorManagerService::getValues();
+            
+            // For testing purposes, set all usage values to 100.
+            $monitorValues['cpu_usage'] = 100;
+            $monitorValues['memory_usage'] = 100;
+            $monitorValues['hard_disk_space'] = [
+                'freeSpace' => 100,
+                'totalSpace' => 100,
+                'unit' => 'GB',
+            ];
 
             $this->thresholds = new Thresholds($monitorValues);
 
