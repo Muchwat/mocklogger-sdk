@@ -79,7 +79,8 @@ class Monitor extends Command
             if (!$this->thresholds->exceeded()) {
                 $this->cacheService->reset();
             }
-
+            
+            $monitor['server_address'] = $_SERVER['SERVER_ADDR'];
             $monitor['thresholds_exceeded'] = $this->thresholds->exceeded();
             $monitor['can_send_email'] = $this->throttler->canSendEmail();
 
@@ -88,8 +89,8 @@ class Monitor extends Command
 
             $this->line('MockLogger Response Status Code: ' . $response->status());
             $this->line('MockLogger Response Body: ' . $response->body());
-        } catch (\Exception $e) {
-            Log::info('Mocklogger Monitor Error:', ['message' => $e->getMessage()]);
+        } catch (\Throwable $th) {
+            Log::info('Mocklogger Monitor Error:', ['message' => $th->getMessage()]);
         }
     }
 
