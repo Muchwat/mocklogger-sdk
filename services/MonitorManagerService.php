@@ -23,6 +23,7 @@ class MonitorManagerService
             'memory_usage' => MemoryMonitor::getValue(),
             'system_load' => SystemLoadMonitor::getValue(),
             'web_server_status' => WebServerMonitor::getValue(),
+            'server_ip_address' => WebServerMonitor::getIpAddress(),
         ];
     }
 }

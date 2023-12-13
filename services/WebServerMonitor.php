@@ -10,14 +10,32 @@ namespace Moktech\MockLoggerSDK\Services;
 class WebServerMonitor
 {
     /**
+     * Get the server's IP address
+     *
+     * @return string The  server's IP address
+     */
+    public static function getIpAddress(): ?string
+    {
+        // Execute the command to get the server's IP address
+        $serverIpAddress = shell_exec('hostname -I');
+
+        // The 'hostname -I' command usually returns a list of IP addresses; extract the first one
+        $serverIpAddress = trim(explode(' ', $serverIpAddress)[0]);
+
+        return $serverIpAddress;
+    }
+
+    /**
      * Get the status of the web server.
      *
      * @return string The status of the web server.
      */
     public static function getValue(): ?string
-    {   
-        if (PHP_OS !== 'Linux') { return null; }
-        
+    {
+        if (PHP_OS !== 'Linux') {
+            return null;
+        }
+
         // Get the configured web server name
         $webServerName = config('mocklogger.monitor.web_server');
 

@@ -80,7 +80,6 @@ class Monitor extends Command
                 $this->cacheService->reset();
             }
             
-            $monitor['server_address'] = $_SERVER['SERVER_ADDR'];
             $monitor['thresholds_exceeded'] = $this->thresholds->exceeded();
             $monitor['can_send_email'] = $this->throttler->canSendEmail();
 
