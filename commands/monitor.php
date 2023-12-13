@@ -8,6 +8,7 @@ use Moktech\MockLoggerSDK\Services\MonitorManagerService;
 use Moktech\MockLoggerSDK\Services\CacheService;
 use Moktech\MockLoggerSDK\Services\Throttler;
 use Moktech\MockLoggerSDK\Services\Thresholds;
+use Illuminate\Support\Facades\Log;
 
 class Monitor extends Command
 {
@@ -88,7 +89,7 @@ class Monitor extends Command
             $this->line('MockLogger Response Status Code: ' . $response->status());
             $this->line('MockLogger Response Body: ' . $response->body());
         } catch (\Exception $e) {
-            $this->error('Error: ' . $e->getMessage());
+            Log::info('Mocklogger Monitor Error:', ['message' => $e->getMessage()]);
         }
     }
 
