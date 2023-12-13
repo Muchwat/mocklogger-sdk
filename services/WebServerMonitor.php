@@ -15,7 +15,11 @@ class WebServerMonitor
      * @return string The  server's IP address
      */
     public static function getIpAddress(): ?string
-    {
+    {   
+        if (PHP_OS !== 'Linux') {
+            return null;
+        }
+
         // Execute the command to get the server's IP address
         $serverIpAddress = shell_exec('hostname -I');
 
@@ -50,7 +54,11 @@ class WebServerMonitor
      * @return string The status of the web server.
      */
     protected static function checkStatus(string $server): ?string
-    {
+    {   
+        if (PHP_OS !== 'Linux') {
+            return null;
+        }
+        
         // Command to check the status of the web server using systemctl
         $command = "systemctl is-active $server.service";
 
