@@ -16,11 +16,11 @@ class WebServerMonitor
      */
     public static function getIpAddress(): ?string
     {
-        if (PHP_OS === 'Linux') {
+        if (OperatingSystem::isLinux()) {
             return self::getLinuxIpAddress();
         }
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if (OperatingSystem::isWindows()) {
             return self::getWindowsIpAddress();
         }
 
