@@ -8,7 +8,7 @@ namespace Moktech\MockLoggerSDK\Services;
  * Monitor class for checking the status of a web server.
  */
 class WebServerMonitor
-{
+{ 
     /**
      * Get the server IP address based on the operating system.
      *
@@ -84,5 +84,23 @@ class WebServerMonitor
             // Log or handle the exception as needed
             return null;
         }
+    }
+
+     /**
+     * Get the status of the web server.
+     *
+     * @return string The status of the web server.
+     */
+    public static function getValue(): ?string
+    {
+        if (PHP_OS !== 'Linux') {
+            return null;
+        }
+
+        // Get the configured web server name
+        $webServerName = config('mocklogger.monitor.web_server');
+
+        // Check the status of the web server
+        return self::checkStatus($webServerName);
     }
 }
