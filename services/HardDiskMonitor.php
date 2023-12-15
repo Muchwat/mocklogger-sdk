@@ -66,8 +66,8 @@ class HardDiskMonitor
 
             // Format the result and return
             return [
-                'free_space' => number_format($freeSpace, 2),
-                'total_space' => number_format($totalSpace, 2),
+                'free_space' => number_format((float)$freeSpace, 2),
+                'total_space' => number_format((float)$totalSpace, 2),
                 'unit' => 'GB',
             ];
         }

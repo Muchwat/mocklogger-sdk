@@ -40,7 +40,7 @@ class CpuMonitor
         $cpuUsage = shell_exec($command);
 
         // Format the result and return
-        return number_format($cpuUsage, 2). '%';
+        return number_format((float)$cpuUsage, 2). '%';
     }
 
     /**
@@ -57,6 +57,6 @@ class CpuMonitor
         $cpuUsage = shell_exec($command);
 
         // Format the result and return
-        return number_format($cpuUsage, 2). '%';
+        return number_format((float)$cpuUsage, 2). '%';
     }
 }

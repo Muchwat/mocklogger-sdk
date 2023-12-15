@@ -35,7 +35,7 @@ class MemoryMonitor
         $command = "free | grep Mem | awk '{print $3/$2 * 100.0}'";
         $memoryUsage = shell_exec($command);
 
-        return $memoryUsage !== null ? number_format($memoryUsage, 2) . '%' : null;
+        return $memoryUsage !== null ? number_format((float)$memoryUsage, 2) . '%' : null;
     }
 
     /**
@@ -61,7 +61,7 @@ class MemoryMonitor
             // Calculate memory usage percentage
             $memoryUsage = ($totalMemory - $freeMemory) / $totalMemory * 100.0;
 
-            return number_format($memoryUsage, 2) . '%';
+            return number_format((float)$memoryUsage, 2) . '%';
         }
 
         return null;
