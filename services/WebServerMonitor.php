@@ -69,11 +69,11 @@ class WebServerMonitor
      */
     public static function getStatus(): ?string
     {
-        // Get the configured web server name
-        $webServerName = config('mocklogger.monitor.server_service');
+        // Get the configured web server service name
+        $serverService = config('mocklogger.monitor.server_service');
 
         // Check the status of the web server
-        return self::status($webServerName);
+        return self::status($serverService);
     }
 
     /**

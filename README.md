@@ -113,15 +113,11 @@ return [
     ...
     // Configure server health monitor.
     'monitor' => [
-        // Specify the web server used by your application, e.g., 'nginx' or 'apache2'.
-        'web_server' => 'nginx', 
+        // Specify the web server service running, e.g., 'nginx' or 'apache2'.
+        'server_service' => 'nginx',
 
         // Set email configuarations, default is 4 emails per 30mins interval.
         'email' => [
-            // Set the email address of the administrator. 
-            // Leave as null if notifications are not required.
-            'admin' => null, // e.g., kevinmuchwat@gmail.com
-
             // Set time interval to get emails (minutes), default is 30 minutes
             'interval' => 30,
 
