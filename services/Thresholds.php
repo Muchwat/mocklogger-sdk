@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Config;
  */
 class Thresholds
 {
-
     /* MonitorManagerService::getValues().
     *
     * @var $monitor
@@ -35,8 +34,6 @@ class Thresholds
     * @var hardDiskThreshold
     */
     private $hardDiskThreshold;
-
-
 
     /**
      * Thresholds constructor.
