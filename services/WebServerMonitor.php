@@ -67,13 +67,13 @@ class WebServerMonitor
      *
      * @return string The status of the web server.
      */
-    public static function getValue(): ?string
+    public static function getStatus(): ?string
     {
         // Get the configured web server name
         $webServerName = config('mocklogger.monitor.web_server');
 
         // Check the status of the web server
-        return self::getStatus($webServerName);
+        return self::status($webServerName);
     }
 
     /**
@@ -82,7 +82,7 @@ class WebServerMonitor
      * @param string $serviceName The name of the web server service.
      * @return string|null The status of the web server or null if it couldn't be determined.
      */
-    public static function getStatus(string $serviceName): ?string
+    public static function status(string $serviceName): ?string
     {
         if (OperatingSystem::isLinux()) {
             return self::getLinuxWebServerStatus($serviceName);

@@ -22,7 +22,7 @@ class MonitorManagerService
             'hard_disk_space' => HardDiskMonitor::getValue(),
             'memory_usage' => MemoryMonitor::getValue(),
             'system_load' => SystemLoadMonitor::getValue(),
-            'web_server_status' => WebServerMonitor::getValue(),
+            'web_server_status' => WebServerMonitor::getStatus(),
             'server_ip_address' => WebServerMonitor::getIpAddress(),
         ];
     }
