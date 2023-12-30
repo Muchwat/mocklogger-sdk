@@ -4,7 +4,6 @@ namespace Moktech\MockLoggerSDK;
 
 use Illuminate\Support\ServiceProvider;
 use Moktech\MockLoggerSDK\Commands\Monitor;
-use Illuminate\Support\Facades\Route;
 
 class MockloggerServiceProvider extends ServiceProvider
 {   
@@ -15,19 +14,17 @@ class MockloggerServiceProvider extends ServiceProvider
         ], 'mocklogger-config');
 
         $this->commands([Monitor::class]);
+
+        $this->app->booted(function () {
+            $schedule = app('Illuminate\Console\Scheduling\Schedule');
+            $schedule->command('mocklogger:monitor')->cron('1 * * * *');
+        });
     }
 
     public function register()
     {
         $this->app->singleton(MockLogger::class, function () {
             return new MockLogger();
-        });
-    }
-
-    public function registerRoute()
-    {
-        Route::get('/mocklogger/action/recovery', function () {
-            var_dump('recovery on track');
         });
     }
 }

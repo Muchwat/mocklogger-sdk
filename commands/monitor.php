@@ -40,7 +40,6 @@ class Monitor extends Command
      */
     protected $throttler;
 
-
     /**
      * Thresholds service instance.
      *
