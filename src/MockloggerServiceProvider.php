@@ -4,6 +4,7 @@ namespace Moktech\MockLoggerSDK;
 
 use Illuminate\Support\ServiceProvider;
 use Moktech\MockLoggerSDK\Commands\Monitor;
+use Moktech\MockLoggerSDK\Middlewares\MockLoggerMiddleware;
 
 class MockloggerServiceProvider extends ServiceProvider
 {   
@@ -17,7 +18,7 @@ class MockloggerServiceProvider extends ServiceProvider
 
         $this->app->booted(function () {
             $router = $this->app['router'];
-            $router->middleware('mocklogger', \App\Http\Middleware\MockLoggerMiddleware::class);
+            $router->middleware('mocklogger', MockLoggerMiddleware::class);
         });
     }
 

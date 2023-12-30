@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Moktech\MockLoggerSDK\Commands;
 
 use Illuminate\Console\Command;
 
