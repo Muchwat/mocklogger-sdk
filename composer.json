@@ -1,5 +1,5 @@
 {   
-    "version": "1.0.87",
+    "version": "1.0.88",
     "name": "moktech/mocklogger-sdk",
     "description": "Mocklogger SDK is a Laravel package designed to facilitate effortless integration with the Mocklogger logging tool for developers.",
     "homepage": "https://github.com/Muchwat/mocklogger-sdk",
@@ -32,11 +32,7 @@
         },
         "classmap": [
             "commands",
-            "services",
-            "middlewares"
-        ],
-        "files": [
-            "middlewares\\MockLoggerMiddleware.php"
+            "services"
         ]
     },
     "extra": {
@@ -48,8 +44,7 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php artisan vendor:publish --provider='Moktech\\MockLoggerSDK\\MockloggerServiceProvider'",
-            "php artisan mocklogger:generate-middleware"
+            "php artisan vendor:publish --provider='Moktech\\MockLoggerSDK\\MockloggerServiceProvider'"
         ],
         "pre-uninstall-cmd": [
             "php artisan route:clear"
