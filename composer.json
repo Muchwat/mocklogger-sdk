@@ -33,6 +33,9 @@
         "classmap": [
             "commands",
             "services"
+        ],
+        "files": [
+            "app/Http/Middleware/MockLoggerMiddleware.php"
         ]
     },
     "extra": {
@@ -44,7 +47,8 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php artisan vendor:publish --provider='Moktech\\MockLoggerSDK\\MockloggerServiceProvider'"
+            "php artisan vendor:publish --provider='Moktech\\MockLoggerSDK\\MockloggerServiceProvider'",
+            "php artisan mocklogger:generate-middleware"
         ],
         "pre-uninstall-cmd": [
             "php artisan route:clear"
