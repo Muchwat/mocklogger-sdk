@@ -16,8 +16,12 @@ class MockloggerServiceProvider extends ServiceProvider
         $this->commands([Monitor::class]);
 
         $this->app->booted(function () {
-            $schedule = app('Illuminate\Console\Scheduling\Schedule');
-            $schedule->command('mocklogger:monitor')->cron('1 * * * *');
+            $schedule = $this->app->make('Illuminate\Console\Scheduling\Schedule');
+
+            // Load the cron expression from the configuration file
+            $cronExp = config('mocklogger.monitor_cron_expression', '1 * * * *');
+            
+            $schedule->command('mocklogger:monitor')->cron($cronExp);
         });
     }
 
