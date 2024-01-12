@@ -1,4 +1,5 @@
 <?php
+
 namespace Moktech\MockLoggerSDK;
 
 use Illuminate\Http\Client\Response;
@@ -16,6 +17,11 @@ use Moktech\MockLoggerSDK\Configuration;
  */
 class HttpLogger
 {
+    /**
+     * @var string $appId The API ID (Name).
+     */
+    private $appId;
+
     /**
      * @var string $apiKey The API key used for authentication when sending log data.
      */
@@ -40,6 +46,7 @@ class HttpLogger
      */
     protected function __construct(Configuration $config)
     {
+        $this->appId = $config->getAppId();
         $this->apiKey = $config->getAppApiToken();
         $this->hostUrl = $config->getHostUrl();
         $this->appKey = $config->getAppKey();
@@ -56,13 +63,13 @@ class HttpLogger
 
         // CPU time used by the current script in seconds
         $cpu = $usage['ru_utime.tv_sec'] + ($usage['ru_utime.tv_usec'] / 1000000);
-        
+
         // Maximum resident set size (memory usage) in kilobytes
         $memory = $usage['ru_maxrss'];
 
         // Peak memory usage in kilobytes
         $peakMemory = memory_get_peak_usage(true) / 1024;
-        
+
         // Total execution time
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
 
@@ -88,7 +95,8 @@ class HttpLogger
         if (!isset($this->apiKey, $this->appKey, $this->hostUrl)) {
             throw new \Exception('Environment variables are not valid!');
         }
-        
+
+        $data['app_id'] = $this->appId;
         $data['usage'] = $this->getResourceUsage();
         $data['timestamp'] = now();
 
